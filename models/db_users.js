@@ -1,0 +1,3 @@
+let userModel = {
+    async findAll = () => {}
+}

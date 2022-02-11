@@ -6,7 +6,7 @@ const app = express();
 
 // app.use('/', (req, res) => {
 //   res.send('hello');
-// });
+// })
 app.use(mainRouter);
 
 http.createServer(app).listen(5000);

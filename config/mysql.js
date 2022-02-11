@@ -1,5 +1,6 @@
-import mysql from 'mysql'
-import dotenv from 'dotenv'
+import mysql from 'mysql';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const db_info = {
   host: process.env.DB_HOST,
@@ -9,7 +10,7 @@ const db_info = {
   database: process.env.DB_NAME,
 };
 
-const db = {
+const db_config = {
   init: () => {
     return mysql.createConnection(db_info);
   },
@@ -23,14 +24,14 @@ const db = {
     });
   },
   disconnect: (conn) => {
-      conn.end((err) => {
-          if(err) {
-              console.log('마이에스큐엘 닫기에러' + err)
-          }else {
-              console.log("마이에스큐엘 닫기 성공!!!")
-          }
-      })
-  }
+    conn.end((err) => {
+      if (err) {
+        console.log('마이에스큐엘 닫기에러' + err);
+      } else {
+        console.log('마이에스큐엘 닫기 성공!!!');
+      }
+    });
+  },
 };
 
-export default db;
+export default db_config;

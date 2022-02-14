@@ -1,6 +1,5 @@
 import mysql from 'mysql';
-import dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 
 const db_info = {
   host: process.env.DB_HOST,
@@ -14,7 +13,7 @@ const db_config = {
   init: () => {
     return mysql.createConnection(db_info);
   },
-  connect: (conn) => {
+  connects: (conn) => {
     conn.connect((err) => {
       if (err) {
         console.log('마이에스큐엘 실행에러' + err);

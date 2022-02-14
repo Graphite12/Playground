@@ -1,4 +1,4 @@
-import postsModel from '../../models/db_post';
+import postsModel from '../../models/db_post.js';
 
 const boards = {
   /**
@@ -19,11 +19,13 @@ const boards = {
           res.redirect('/');
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
-
   /**
    * 글 작성 폼 보여주기
+   *
    * @param {*} req
    * @param {*} res
    */
@@ -31,21 +33,25 @@ const boards = {
     res.render('posts/post_write.ejs');
   },
 
-  getPostView: (req, res) => {
-    try {
-      let { id } = req.params;
-
-      postsModel.postView(id, (result) => {
-        if (result) {
-          console.log(result);
-          res.render('posts/post_view.ejs', {
-            title: result.subject,
-            post: result,
-          });
-        }
-      });
-    } catch (error) {}
-  },
+  /**
+   * 작성된 글 보여주기
+   * @param {*} req
+   * @param {*} res
+   */
+  //   getPostView: (req, res) => {
+  //     try {
+  //       let { id } = req.params;
+  //       postsModel.postView(id, (result) => {
+  //         if (result) {
+  //           console.log(result);
+  //           res.render('posts/post_view.ejs', {
+  //             title: result.subject,
+  //             post: result,
+  //           });
+  //         }
+  //       });
+  //     } catch (error) {}
+  //   },
 
   /**
    * 글 작성 하기
@@ -56,20 +62,23 @@ const boards = {
   writePost: (req, res) => {
     try {
       let { body } = req;
-
       let data = {
         name: body.name,
         subject: body.subject,
         content: body.content,
       };
 
+      console.log(data);
       postsModel.createPost(data, (result) => {
         if (result) {
           console.log(result);
+          res.redirect('/post');
         } else {
-          res.redirect('/posts/');
+          res.redirect('/');
         }
       });
     } catch (error) {}
   },
 };
+
+export default boards;

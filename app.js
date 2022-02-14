@@ -1,7 +1,9 @@
 import express from 'express';
 import http from 'http';
+import https from 'https';
 import mainRouter from './routes/main/mainRoute.js';
 import path from 'path';
+import boardRouter from './routes/board/boardRoute.js';
 const __dirname = path.resolve();
 
 const app = express();
@@ -23,13 +25,6 @@ app.use(express.json());
 */
 app.use(express.urlencoded({ extended: true }));
 
-/* ejs */
-
-/**
- * 뷰엔진
- *
- * Views/ 폴더 내의 ejs파일 적용
- */
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views/'));
 
@@ -39,6 +34,7 @@ app.set('views', path.join(__dirname, './views/'));
 
 /* 라우트 설정 */
 app.use(mainRouter);
+app.use('/post', boardRouter);
 
 /* http 실행 */
 http.createServer(app).listen(5000);

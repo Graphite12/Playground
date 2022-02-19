@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>내 게시글 보기</title>
+  </head>
+  <body>
+      작성자: <input type="text" name="name" value="<%= data.name %>" /><br />
+      제목:
+      <input type="text" name="subject" value="<%= data.subject %>" /><br />
+      내용:
+      <input
+        type="text"
+        name="content"
+        value="<%= data.content %>"
+      ></input>
+      <div>
+      <button onclick="location.href='/post/read/<%= data.id %>/edit'">수정</button>
+      <a href="/post/">글 목록</a>
+    </div>
+  
+  </body>
+</html>

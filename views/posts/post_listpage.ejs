@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>게시글 리스트</title>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+   
+    <table border="1">
+      <colgroup>
+        <col width="50" />
+        <col width="200" />
+        <col width="100" />
+        
+      </colgroup>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>생성일</th>
+        </tr>
+      </thead>
+      <tbody> 
+        <% list.forEach((lis, index) => { %>
+        <tr>
+          <td><%= lis.id %></td>
+          <td>
+          <a href="/post/<%= lis.id %>_">
+          <%= lis.subject %>
+        </a>
+        </td>
+          <td><%= lis.name %></td>
+          <td><%= lis.created_at %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table border='1'>
+    <button  onclick="location.href='/post/write'">글작성</button>
+  </body>
+</html>

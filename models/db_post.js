@@ -17,7 +17,7 @@ const postsModel = {
         throw new Error(error);
       } else {
         console.log('db.글리스트');
-        console.log(row);
+        // console.log(row);
         // console.log(fields);
         cb(row);
       }
@@ -37,8 +37,9 @@ const postsModel = {
       if (error) {
         throw new Error(error);
       } else {
+        console.log('postview');
         console.log(results);
-        console.log(fields);
+        // console.log(fields);
         cb(results[0]);
       }
     });
@@ -71,6 +72,8 @@ const postsModel = {
       if (error) {
         throw new Error(error);
       } else {
+        console.log('geteditView');
+        console.log(results);
         cb(results[0]);
       }
     });
@@ -81,15 +84,17 @@ const postsModel = {
    * @param {*} data
    * @param {*} cb
    */
+
   updatePost: (data, cb) => {
     const sql = `UPDATE POSTS SET name = ?, subject = ?, content = ?, updated_at = NOW() WHERE id = ?`;
-    const params = [data.id, data.name, data.subject, data.content];
+    const params = [data.name, data.subject, data.content, data.id];
     mysqlConn.query(sql, params, (error, results, fields) => {
       if (error) {
         throw new Error(error);
       } else {
         console.log('db.글수정');
-        console.log(fields);
+
+        console.log(results);
         cb(results);
       }
     });
@@ -99,9 +104,28 @@ const postsModel = {
    *
    *
    */
-  deletePost: (p) => {
-    const sql = ``;
-    mysqlConn.query();
+  deletePost: (id, cb) => {
+    const sql = `DELETE FROM POSTS WHERE id=?`;
+    console.log('번호' + id);
+    mysqlConn.query(sql, [id], (error, results, fields) => {
+      if (error) {
+        throw new Error(error);
+      }
+      console.log(results);
+      cb(results);
+    });
+  },
+
+  cleaner: () => {
+    const sql = 'TRUNCATE TABLE POSTS';
+    mysqlConn.query(sql, (error, results, fields) => {
+      if (error) {
+        throw new Error(error);
+      } else {
+        console.log(results);
+        return;
+      }
+    });
   },
 };
 

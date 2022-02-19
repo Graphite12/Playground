@@ -23,15 +23,6 @@ const boards = {
       console.log(error);
     }
   },
-  /**
-   * 글 작성 폼 보여주기
-   *
-   * @param {*} req
-   * @param {*} res
-   */
-  getWriteForm: (req, res) => {
-    res.render('posts/post_writepage.ejs', { title: '글 작성하기' });
-  },
 
   /**
    * 작성된 글 보여주기
@@ -41,9 +32,12 @@ const boards = {
   getPostView: (req, res) => {
     try {
       let { id } = req.params;
+
+      if (!id) {
+        res.json('이미 삭제된 글입니다.');
+      }
       postsModel.postView(id, (result) => {
         if (result) {
-          console.log(result);
           res.render('posts/post_viewpage.ejs', {
             data: result,
           });
@@ -52,6 +46,16 @@ const boards = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  /**
+   * 글 작성 폼 보여주기
+   *
+   * @param {*} req
+   * @param {*} res
+   */
+  getWriteForm: (req, res) => {
+    res.render('posts/post_writepage.ejs', { title: '글 작성하기' });
   },
 
   /**
@@ -73,9 +77,9 @@ const boards = {
       postsModel.insertPost(data, (result) => {
         if (result) {
           // console.log(result);
-          res.redirect('/post/');
+          res.redirect('/boards/list');
         } else {
-          res.redirect('/post/write');
+          res.redirect('/boards/write');
         }
       });
     } catch (error) {
@@ -83,12 +87,17 @@ const boards = {
     }
   },
 
+  /**
+   * 수정글 페이지 가져오기
+   *
+   * @param {*} req
+   * @param {*} res
+   */
   getEditView: (req, res) => {
     try {
       let { id } = req.params;
       postsModel.getEditView(id, (result) => {
         if (result) {
-          console.log(result);
           res.render('posts/post_editpage.ejs', {
             title: '게시글 수정',
             data: result,
@@ -99,6 +108,7 @@ const boards = {
       console.log(error);
     }
   },
+
   /**
    * 글 수정하기
    * @param {*} req
@@ -117,10 +127,9 @@ const boards = {
 
       postsModel.updatePost(data, (result) => {
         if (result) {
-          console.log(result);
-          res.redirect(`/post/read/${id}`);
+          res.redirect(`/boards/post/${id}`);
         } else {
-          res.redirect(`/post/read/${id}/edit`);
+          res.redirect(`/boards/list/edit/${id}`);
         }
       });
     } catch (error) {
@@ -133,9 +142,32 @@ const boards = {
    * @param {*} req
    * @param {*} res
    */
-  deletePost: (req, res) => {
+  removePost: (req, res) => {
     try {
+      console.log('시작');
+
+      let { id } = req.params;
+
+      console.log(id);
+      postsModel.deletePost(id, (result) => {
+        if (result) {
+          console.log(result);
+          res.redirect(`/boards/list`);
+        } else {
+          res.redirect(`/boards/list`);
+        }
+      });
     } catch (error) {}
+  },
+
+  cleanPostdb: (req, res) => {
+    try {
+      postsModel.cleaner();
+
+      res.redirect(`/boards/list`);
+    } catch (error) {
+      res.json(error);
+    }
   },
 };
 

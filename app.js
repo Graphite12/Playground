@@ -34,7 +34,7 @@ app.set('views', path.join(__dirname, 'views/'));
 
 /* 라우트 설정 */
 app.use(mainRouter);
-app.use('/post', boardRouter);
+app.use('/boards', boardRouter);
 
 /* http 실행 */
 http.createServer(app).listen(5000);

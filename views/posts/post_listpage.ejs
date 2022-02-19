@@ -28,7 +28,7 @@
         <tr>
           <td><%= lis.id %></td>
           <td>
-          <a href="/post/<%= lis.id %>_">
+          <a href="/boards/post/<%= lis.id %>">
           <%= lis.subject %>
         </a>
         </td>
@@ -38,6 +38,9 @@
         <% }) %>
       </tbody>
     </table border='1'>
-    <button  onclick="location.href='/post/write'">글작성</button>
+    <button onclick="location.href='/boards/write'">글작성</button>
+    <form action="/boards/cleaner" method="post">
+      <button type="submit">클리너</button>
+    </form>
   </body>
 </html>

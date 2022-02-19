@@ -6,23 +6,26 @@
   </head>
   <body>
     <h2><%= title %></h2>
-    <form action="/post/write" method="post">
+    <form action="/boards/write" method="post">
       <table>
         <tr>
           <td>작성자</td>
-          <input type="text" name="name" />
+          <td><input type="text" name="name" /></td>
         </tr>
         <tr>
           <td>제목</td>
-          <input type="text" name="subject" />
+          <td><input type="text" name="subject" /></td>
         </tr>
         <tr>
           <td>내용</td>
-          <textarea name="content"></textarea>
+          <td><textarea name="content"></textarea></td>
         </tr>
-        <td colspan="2">
-          <button>글쓰기</button>
-        </td>
+        <tr>
+          <td colspan="2">
+            <button type="submit">글쓰기</button>
+            <a href="/boards/list">목록</a>
+          </td>
+        </tr>
       </table>
     </form>
   </body>

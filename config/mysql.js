@@ -1,7 +1,7 @@
-import mysql from 'mysql';
+import mysql from 'mysql2';
 import 'dotenv/config';
 
-const db_info = {
+const db = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -11,7 +11,7 @@ const db_info = {
 
 const db_config = {
   init: () => {
-    return mysql.createConnection(db_info);
+    return mysql.createConnection(db);
   },
   connects: (conn) => {
     conn.connect((err) => {

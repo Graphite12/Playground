@@ -38,20 +38,20 @@ const boards = {
    * @param {*} req
    * @param {*} res
    */
-  //   getPostView: (req, res) => {
-  //     try {
-  //       let { id } = req.params;
-  //       postsModel.postView(id, (result) => {
-  //         if (result) {
-  //           console.log(result);
-  //           res.render('posts/post_view.ejs', {
-  //             title: result.subject,
-  //             post: result,
-  //           });
-  //         }
-  //       });
-  //     } catch (error) {}
-  //   },
+  getPostView: (req, res) => {
+    try {
+      let { id } = req.params;
+      postsModel.postView(id, (result) => {
+        if (result) {
+          console.log(result);
+          res.render('posts/post_view.ejs', {
+            title: result.subject,
+            post: result,
+          });
+        }
+      });
+    } catch (error) {}
+  },
 
   /**
    * 글 작성 하기
@@ -67,7 +67,7 @@ const boards = {
         subject: body.subject,
         content: body.content,
       };
-
+      console.log('c.글생성');
       console.log(data);
       postsModel.createPost(data, (result) => {
         if (result) {
@@ -77,6 +77,26 @@ const boards = {
           res.redirect('/');
         }
       });
+    } catch (error) {}
+  },
+
+  /**
+   * 글 수정하기
+   * @param {*} req
+   * @param {*} res
+   */
+  modifyPost: (req, res) => {
+    try {
+    } catch (error) {}
+  },
+
+  /**
+   * 글 삭제하기
+   * @param {*} req
+   * @param {*} res
+   */
+  deletePost: (req, res) => {
+    try {
     } catch (error) {}
   },
 };

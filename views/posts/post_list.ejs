@@ -17,6 +17,7 @@
           <th>ID</th>
           <th>제목</th>
           <th>작성자</th>
+          <th>생성일</th>
         </tr>
       </thead>
       <tbody>
@@ -25,6 +26,7 @@
           <td><%=i+1 %></td>
           <td><%=list[i].subject %></td>
           <td><%=list[i].name %></td>
+          <td><%=list[i].created_at %></td>
         </tr>
         <% } %>
       </tbody>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <h2><%= title %></h2>
+    <form action="post/read/<%= data.id %>/edit" method="post">
+      <table>
+        <tr>
+          <td>작성자</td>
+          <td><input type="text" name="name" value="<%= data.name %>" /></td>
+        </tr>
+        <tr>
+          <td>제목</td>
+          <td>
+            <input type="text" name="subject" value="<%= data.subject %>" />
+          </td>
+        </tr>
+        <tr>
+          <td>내용</td>
+          <td>
+            <textarea name="content" value="<%= data.content %>"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button type="submit">글 수정</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

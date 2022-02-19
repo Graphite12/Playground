@@ -9,9 +9,9 @@ const boards = {
    */
   getList: (req, res) => {
     try {
-      postsModel.postsList((result) => {
+      postsModel.renderList((result) => {
         if (result) {
-          res.render('posts/post_list.ejs', {
+          res.render('posts/post_listpage.ejs', {
             title: '게시글 리스트',
             list: result,
           });
@@ -30,7 +30,7 @@ const boards = {
    * @param {*} res
    */
   getWriteForm: (req, res) => {
-    res.render('posts/post_write.ejs');
+    res.render('posts/post_writepage.ejs', { title: '글 작성하기' });
   },
 
   /**
@@ -44,13 +44,14 @@ const boards = {
       postsModel.postView(id, (result) => {
         if (result) {
           console.log(result);
-          res.render('posts/post_view.ejs', {
-            title: result.subject,
-            post: result,
+          res.render('posts/post_viewpage.ejs', {
+            data: result,
           });
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   /**
@@ -61,25 +62,43 @@ const boards = {
    */
   writePost: (req, res) => {
     try {
-      let { body } = req;
+      let { name, subject, content } = req.body;
       let data = {
-        name: body.name,
-        subject: body.subject,
-        content: body.content,
+        name: name,
+        subject: subject,
+        content: content,
       };
-      console.log('c.글생성');
-      console.log(data);
-      postsModel.createPost(data, (result) => {
+      // console.log('c.글생성');
+      // console.log(data);
+      postsModel.insertPost(data, (result) => {
         if (result) {
-          console.log(result);
-          res.redirect('/post');
+          // console.log(result);
+          res.redirect('/post/');
         } else {
-          res.redirect('/');
+          res.redirect('/post/write');
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
 
+  getEditView: (req, res) => {
+    try {
+      let { id } = req.params;
+      postsModel.getEditView(id, (result) => {
+        if (result) {
+          console.log(result);
+          res.render('posts/post_editpage.ejs', {
+            title: '게시글 수정',
+            data: result,
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
   /**
    * 글 수정하기
    * @param {*} req
@@ -87,7 +106,26 @@ const boards = {
    */
   modifyPost: (req, res) => {
     try {
-    } catch (error) {}
+      let { id } = req.params;
+      let { name, subject, content } = req.body;
+      let data = {
+        id: id,
+        name: name,
+        subject: subject,
+        content: content,
+      };
+
+      postsModel.updatePost(data, (result) => {
+        if (result) {
+          console.log(result);
+          res.redirect(`/post/read/${id}`);
+        } else {
+          res.redirect(`/post/read/${id}/edit`);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   /**

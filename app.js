@@ -4,6 +4,11 @@ import https from 'https';
 import mainRouter from './routes/main/mainRoute.js';
 import path from 'path';
 import boardRouter from './routes/board/boardRoute.js';
+import methodOverride from 'method-override';
+
+/**
+ * __dirname을 활용
+ */
 const __dirname = path.resolve();
 
 const app = express();
@@ -24,6 +29,11 @@ app.use(express.json());
     false면 query-string 모듈을 사용
 */
 app.use(express.urlencoded({ extended: true }));
+/**
+ * PUT, DELETE 사용
+ *
+ */
+app.use(methodOverride('_method'));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views/'));
@@ -35,6 +45,10 @@ app.set('views', path.join(__dirname, 'views/'));
 /* 라우트 설정 */
 app.use(mainRouter);
 app.use('/boards', boardRouter);
+// app.use('/system');
 
 /* http 실행 */
-http.createServer(app).listen(5000);
+http.createServer(app).listen(8080);
+
+/* https 실행 */
+// https.createServer().listen(8443);

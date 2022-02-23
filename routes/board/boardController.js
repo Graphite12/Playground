@@ -36,7 +36,8 @@ const boards = {
       if (!id) {
         res.json('이미 삭제된 글입니다.');
       }
-      postsModel.postView(id, (result) => {
+
+      postsModel.getPostView(id, (result) => {
         if (result) {
           res.render('posts/post_viewpage.ejs', {
             data: result,
@@ -96,7 +97,7 @@ const boards = {
   getEditView: (req, res) => {
     try {
       let { id } = req.params;
-      postsModel.getEditView(id, (result) => {
+      postsModel.getPostView(id, (result) => {
         if (result) {
           res.render('posts/post_editpage.ejs', {
             title: '게시글 수정',
@@ -157,6 +158,11 @@ const boards = {
           res.redirect(`/boards/list`);
         }
       });
+    } catch (error) {}
+  },
+
+  searchPost: (req, res) => {
+    try {
     } catch (error) {}
   },
 

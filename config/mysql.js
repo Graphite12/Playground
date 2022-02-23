@@ -13,7 +13,7 @@ const db_config = {
   init: () => {
     return mysql.createConnection(db);
   },
-  connects: (conn) => {
+  connect: (conn) => {
     conn.connect((err) => {
       if (err) {
         console.log('마이에스큐엘 실행에러' + err);

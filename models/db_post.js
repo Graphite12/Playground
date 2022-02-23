@@ -2,43 +2,68 @@ import run from '../config/mysql_pool.js';
 import db_config from '../config/mysql.js';
 const mysqlConn = db_config.init();
 //연결 확인
-db_config.connects(mysqlConn);
+db_config.connect(mysqlConn);
 //run();
 const postsModel = {
   /**
    * 게시글 리스트
    *
-   * @param {*} cb 콜백함수
+   * @param {*} ctrl 콜백함수
    */
-  renderList: (cb) => {
+  renderList: (ctrl) => {
     const sql = `SELECT * FROM POSTS ORDER BY id DESC`;
-    mysqlConn.query(sql, (error, row, fields) => {
+    mysqlConn.query(sql, (error, rows, fields) => {
       if (error) {
         throw new Error(error);
       } else {
-        console.log('db.글리스트');
-        // console.log(row);
+        console.log('db. row를 까보자');
+        console.log(rows);
         // console.log(fields);
-        cb(row);
+        ctrl(rows);
       }
     });
   },
 
-  /** DB, 게시글 보기
+  /**
+   * 게시글 페이지네이션
+   * @param {*} ctrl
+   */
+  renderListPasing: (ctrl) => {
+    //무지성 긁어오기
+    let sql = `SELECT count(*) FROM POSTS`;
+    //Offset Limit 설정해서 긁어오기
+    let sql2 = `SELECT * FROM POSTS ORDER BY id LIMIT 0, 20`;
+    //JOIN 페이징
+    let sql3 = `SELECT * FROM POSTS JOIN (SELECT id FROM POSTS LIMIT 20 OFFSET 5000) AS t ON POSTS.id = t.id`;
+    // 커버링 인덱스 사용법(이방법은 테이블 수정 이후 가능)
+    let sql4 = `SELECT id, post_no, post_type, name FROM POSTS WHERE created_at >= 2000-01-01 LIMIT 500000, 10`;
+
+    mysqlConn.query(sql3, (error, rows) => {
+      if (error) {
+        throw new Error(error);
+      } else {
+        console.log(rows);
+        ctrl(rows);
+      }
+    });
+  },
+
+  /** 작성된 글 보기
    *
-   * 커뮤니티에 등록된 글을 클릭하면 게시글을 가져온다.
+   * 등록된 글을 클릭하면 내용을 가져온다.
    *
    * @param {*} id: 게시글 번호
    * @param {*} cb: 콜백함수
    */
-  postView: (id, cb) => {
+  getPostView: (id, cb) => {
     const sql = `SELECT * FROM POSTS WHERE id=?`;
-    mysqlConn.query(sql, [id], (error, results, fields) => {
+    mysqlConn.query(sql, id, (error, results, fields) => {
       if (error) {
         throw new Error(error);
       } else {
-        console.log('postview');
+        console.log('db. 작성된 글');
         console.log(results);
+        console.log(id);
         // console.log(fields);
         cb(results[0]);
       }
@@ -66,7 +91,13 @@ const postsModel = {
     });
   },
 
-  getEditView: (id, cb) => {
+  /**
+   * 수정할 게시글 데이터 가져오기
+   *
+   * @param {*} id
+   * @param {*} cb
+   */
+  getEditPostView: (id, cb) => {
     let sql = 'SELECT * FROM POSTS WHERE id = ?';
     mysqlConn.query(sql, [id], (error, results, fields) => {
       if (error) {
@@ -87,7 +118,7 @@ const postsModel = {
 
   updatePost: (data, cb) => {
     const sql = `UPDATE POSTS SET name = ?, subject = ?, content = ?, updated_at = NOW() WHERE id = ?`;
-    const params = [data.name, data.subject, data.content, data.id];
+    const params = [data.id, data.name, data.subject, data.content];
     mysqlConn.query(sql, params, (error, results, fields) => {
       if (error) {
         throw new Error(error);
@@ -99,13 +130,18 @@ const postsModel = {
       }
     });
   },
+
   /**
-   *  게시글 삭제
+   * 게시글 삭제
    *
-   *
+   * @param {*} id
+   * @param {*} cb
    */
   deletePost: (id, cb) => {
+    //
     const sql = `DELETE FROM POSTS WHERE id=?`;
+
+    const sql2 = `DROP INDE`;
     console.log('번호' + id);
     mysqlConn.query(sql, [id], (error, results, fields) => {
       if (error) {
@@ -116,6 +152,15 @@ const postsModel = {
     });
   },
 
+  /**
+   * 게시글 검색
+   * @param {*} cb
+   */
+  searchPost: (cb) => {},
+
+  /**
+   * POSTS 테이블 청소
+   */
   cleaner: () => {
     const sql = 'TRUNCATE TABLE POSTS';
     mysqlConn.query(sql, (error, results, fields) => {

@@ -31,7 +31,7 @@ const postsModel = {
    * 게시글 페이지네이션
    * @param {*} ctrl // 컨트롤러로 전달함수
    */
-  renderListPasing: (ctrl) => {
+  renderPagination: (ctrl) => {
     //무지성 긁어오기
     let sql = `SELECT count(*) FROM POSTS`;
     //Offset Limit 설정해서 긁어오기
@@ -45,8 +45,27 @@ const postsModel = {
       if (error) {
         throw new Error(error);
       } else {
-        console.log('페이지 네이션');
-        console.log(rows);
+        // console.log('페이지 네이션');
+        // console.log(rows);
+        ctrl(rows);
+      }
+    });
+  },
+
+  /**
+   * 서브 페이지네이션
+   * @param {*} data
+   * @param {*} ctrl
+   */
+  renderLOPage: (data, ctrl) => {
+    let sql1 = `SELECT * FROM POSTS ORDER BY id DESC limit ?,? `;
+    const { offset, limit } = data;
+    mysqlConn.query(sql1, [offset, limit], (error, rows) => {
+      if (error) {
+        throw new Error(error);
+      } else {
+        // console.log('페이지 네이션');
+        // console.log(rows);
         ctrl(rows);
       }
     });

@@ -7,8 +7,9 @@ const boardRouter = express.Router();
 boardRouter.get('/list/', boards.getList);
 
 /* 게시글 리스트 페이지네이션 */
-boardRouter.get('/target/:page', boards.getListPagination);
+boardRouter.get('/list/:page', boards.getListPagination);
 
+/* 게시글 작성 폼 가져오기 */
 boardRouter.get('/write', boards.getWriteForm);
 
 /* 게시글 작성 */

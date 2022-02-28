@@ -23,35 +23,32 @@
         </tr>
       </thead>
       <tbody> 
-        <% data.forEach((lis, index) => { %>
-        <tr>
+        <% if(total_post_count !== 0) { %>
+         <% data.forEach((lis, index) => { %>
+         <tr>
           <td><%= lis.id %></td>
           <td>
           <%= lis.subject %>
-        </a>
-        </td>
+          </td>
           <td><%= lis.name %></td>
           <td><%= lis.created_at %></td>
-        </tr>
-        <% }) %>
+         </tr>
+         <% }) %>
+        <% } else { %>
+          <tr>
+            <td>등록된 글이 없습니다.</td>
+            <td>새로 글을 입력해주세요.</td>
+          </tr>
+        <% } %>
       </tbody>
     </table border='1'>
-    <%
-    let page_size = page.page_size,
-    total_list = page.total_list,
-    current_page = page.current_page,
-    total_page = page.total_page,
-    first_page = page. first_page,
-    last_page = page.last_page 
-    %>
   <div>
   <ul> 
-    <li>   
-    <a href='/boards/target/<%= (first_page - 1) %>'> 이전으로 건너뛰기</a>
-  </li>
-  <li>   
-    <a href='/boards/target/<%= (last_page + 1) %>'> 다음으로 건너뛰기</a>
-  </li>
+    <% for(let i = start_page; i <= end_page; i++) { %> 
+      <li value="<%= i %>" >
+        <a href="/boards/list/<%= i %>"><%= i %></a>
+      </li>
+    <% } %>
   </ul>
   </div>
     <button onclick="location.href='/boards/write'">글작성</button>

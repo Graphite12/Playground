@@ -23,6 +23,85 @@ const boards = {
       console.log(error);
     }
   },
+  // <!-- <% page.forEach((pg, idx) =>{ %> -->
+  //   <!-- <% }) %> -->
+  /**
+   * 페이지 네이션
+   *
+   * @param {*} req
+   * @param {*} res
+   */
+  getListPagination: (req, res) => {
+    try {
+      postsModel.renderPagination((result) => {
+        /* 작성된 글 총 개수 */
+        let total_post_count = result.length;
+        /* 페이지 당 출력될 게시글 수 */
+        const content_page_size = 10;
+        /* 페이지 버튼 개수 */
+        const list_page_size = 10;
+        /* Limit */
+        let limits = 0;
+        /* 현재 페이지 */
+        const curr_page = req.params.page;
+        /* 전체 페이지 수 */
+        const total_page = Math.ceil(total_post_count / content_page_size);
+        /* 저체 세트 수 */
+        const total_target = Math.ceil(total_page / list_page_size);
+        /* 현제 세트 번호 */
+        const curr_target = Math.ceil(curr_page / list_page_size);
+        /* 현재 세트 번호 시작 페이지 */
+        const start_page = (curr_target - 1) * list_page_size + 1;
+        /* 현제 세트 번호 마지막 페이지 */
+        const end_page = start_page + list_page_size - 1;
+
+        if (total_post_count < 0) total_post_count = 0;
+        if (curr_page < 0) {
+          limits = 0;
+        } else {
+          limits = (curr_page - 1) * content_page_size;
+        }
+
+        const data = {
+          offset: limits,
+          limit: content_page_size,
+        };
+
+        postsModel.renderLOPage(data, (result) => {
+          console.log('페이지네이션 파라미터');
+          console.log(req.params);
+          console.log('페이지네이션 바디');
+          console.log(req.body);
+          console.log('페이지네이션 쿼리');
+          console.log(req.query);
+          console.log(total_post_count);
+          console.log(content_page_size);
+          console.log(list_page_size);
+          console.log(curr_page);
+          console.log(total_page);
+          console.log(total_target);
+          console.log(curr_target);
+          console.log(start_page);
+          console.log(end_page);
+
+          res.render('posts/post_pagination.ejs', {
+            data: result,
+            total_post_count,
+            content_page_size,
+            list_page_size,
+            curr_page,
+            total_page,
+            total_target,
+            curr_target,
+            start_page,
+            end_page,
+          });
+        });
+      });
+    } catch (error) {
+      res.json(error);
+    }
+  },
 
   /**
    * 작성된 글 보여주기

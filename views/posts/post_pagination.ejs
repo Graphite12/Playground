@@ -3,10 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>게시글 리스트</title>
+    <title>페이지네이션</title>
   </head>
   <body>
-    <h1><%= title %></h1>
    
     <table border="1">
       <colgroup>
@@ -24,24 +23,37 @@
         </tr>
       </thead>
       <tbody> 
-        <% list.forEach((lis, index) => { %>
-        <tr>
+        <% if(total_post_count !== 0) { %>
+         <% data.forEach((lis, index) => { %>
+         <tr>
           <td><%= lis.id %></td>
           <td>
-          <a href="/boards/post/<%= lis.id %>">
           <%= lis.subject %>
-        </a>
-        </td>
+          </td>
           <td><%= lis.name %></td>
           <td><%= lis.created_at %></td>
-        </tr>
-        <% }) %>
+         </tr>
+         <% }) %>
+        <% } else { %>
+          <tr>
+            <td>등록된 글이 없습니다.</td>
+            <td>새로 글을 입력해주세요.</td>
+          </tr>
+        <% } %>
       </tbody>
     </table border='1'>
+  <div>
+  <ul> 
+    <% for(let i = start_page; i <= end_page; i++) { %> 
+      <li value="<%= i %>" >
+        <a href="/boards/list/<%= i %>"><%= i %></a>
+      </li>
+    <% } %>
+  </ul>
+  </div>
     <button onclick="location.href='/boards/write'">글작성</button>
     <form action="/boards/cleaner" method="post">
       <button type="submit">클리너</button>
     </form>
-
   </body>
 </html>

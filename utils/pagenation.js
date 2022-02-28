@@ -1,5 +1,5 @@
 class Pagenations {
-  constructor(totalCount, currentPage, pageUri, perPage = 2) {
+  constructor(totalCount, currentPage, perPage = 2) {
     this.perPage = perPage;
     this.totalCount = parseInt(totalCount);
     this.currentPage = parseInt(currentPage);
@@ -8,4 +8,8 @@ class Pagenations {
     this.pageCount = Math.ceil(this.totalCount / this.perPage);
     this.nextPage = this.nextPage;
   }
+
+  showCurrPageBtn() {}
+  nextPageArrow() {}
+  prevPageArrow() {}
 }

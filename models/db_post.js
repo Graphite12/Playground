@@ -12,12 +12,15 @@ const postsModel = {
    */
   renderList: (ctrl) => {
     const sql = `SELECT * FROM POSTS ORDER BY id DESC`;
-    mysqlConn.query(sql, (error, rows, fields) => {
+    let sql3 = `SELECT * FROM POSTS AS p JOIN (SELECT id FROM POSTS LIMIT 0, 20) AS t ON p.id = t.id ORDER BY t.id DESC`;
+    let sql2 = `SELECT * FROM POSTS ORDER BY id LIMIT 0, 100`;
+
+    mysqlConn.query(sql3, (error, rows, fields) => {
       if (error) {
         throw new Error(error);
       } else {
-        console.log('db. row를 까보자');
-        console.log(rows);
+        // console.log('db. row를 까보자');
+        // console.log(rows);
         // console.log(fields);
         ctrl(rows);
       }
@@ -26,7 +29,7 @@ const postsModel = {
 
   /**
    * 게시글 페이지네이션
-   * @param {*} ctrl
+   * @param {*} ctrl // 컨트롤러로 전달함수
    */
   renderListPasing: (ctrl) => {
     //무지성 긁어오기
@@ -34,7 +37,7 @@ const postsModel = {
     //Offset Limit 설정해서 긁어오기
     let sql2 = `SELECT * FROM POSTS ORDER BY id LIMIT 0, 20`;
     //JOIN 페이징
-    let sql3 = `SELECT * FROM POSTS JOIN (SELECT id FROM POSTS LIMIT 20 OFFSET 5000) AS t ON POSTS.id = t.id`;
+    let sql3 = `SELECT * FROM POSTS AS p JOIN (SELECT id FROM POSTS LIMIT 0, 20) AS t ON p.id = t.id ORDER BY p.id DESC`;
     // 커버링 인덱스 사용법(이방법은 테이블 수정 이후 가능)
     let sql4 = `SELECT id, post_no, post_type, name FROM POSTS WHERE created_at >= 2000-01-01 LIMIT 500000, 10`;
 
@@ -42,6 +45,7 @@ const postsModel = {
       if (error) {
         throw new Error(error);
       } else {
+        console.log('페이지 네이션');
         console.log(rows);
         ctrl(rows);
       }

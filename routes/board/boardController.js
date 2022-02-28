@@ -23,6 +23,67 @@ const boards = {
       console.log(error);
     }
   },
+  // <!-- <% page.forEach((pg, idx) =>{ %> -->
+  //   <!-- <% }) %> -->
+  /**
+   * 페이지 네이션
+   *
+   * @param {*} req
+   * @param {*} res
+   */
+  getListPagination: (req, res) => {
+    try {
+      let total_page_count = 0;
+      const current_page = req.params.page || 1;
+      const page_size = 10;
+      const page_list_size = 10;
+      postsModel.renderListPasing((result) => {
+        total_page_count = result.length;
+
+        /* 전체 페이지 수 */
+        const total_page = Math.ceil(total_page_count / page_size);
+
+        /* 전체 세트 수 */
+        const total_list = Math.ceil(total_page / page_list_size);
+
+        /* 현재 페이지 */
+        const curr_page = Math.ceil(current_page / page_list_size);
+        const first_page = (curr_page - 1) * 10 + 1;
+        const last_page = first_page + page_list_size - 1;
+
+        const pagenations = {
+          page_size,
+          total_list,
+          current_page,
+          total_page,
+          first_page,
+          last_page,
+        };
+
+        postsModel.renderListPasing((result) => {});
+
+        console.log(result.length);
+        console.log(current_page);
+        console.log(total_page);
+        console.log(total_list);
+        console.log(curr_page);
+        console.log(first_page);
+        console.log(last_page);
+
+        console.log('페이지네이션 파라미터');
+        console.log(req.params);
+        console.log('페이지네이션 바디');
+        console.log(req.body);
+        console.log('페이지네이션 쿼리');
+        console.log(req.query);
+
+        res.render('posts/post_pagination.ejs', {
+          data: result,
+          page: pagenations,
+        });
+      });
+    } catch (error) {}
+  },
 
   /**
    * 작성된 글 보여주기

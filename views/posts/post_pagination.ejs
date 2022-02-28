@@ -3,10 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>게시글 리스트</title>
+    <title>페이지네이션</title>
   </head>
   <body>
-    <h1><%= title %></h1>
    
     <table border="1">
       <colgroup>
@@ -24,11 +23,10 @@
         </tr>
       </thead>
       <tbody> 
-        <% list.forEach((lis, index) => { %>
+        <% data.forEach((lis, index) => { %>
         <tr>
           <td><%= lis.id %></td>
           <td>
-          <a href="/boards/post/<%= lis.id %>">
           <%= lis.subject %>
         </a>
         </td>
@@ -38,10 +36,27 @@
         <% }) %>
       </tbody>
     </table border='1'>
+    <%
+    let page_size = page.page_size,
+    total_list = page.total_list,
+    current_page = page.current_page,
+    total_page = page.total_page,
+    first_page = page. first_page,
+    last_page = page.last_page 
+    %>
+  <div>
+  <ul> 
+    <li>   
+    <a href='/boards/target/<%= (first_page - 1) %>'> 이전으로 건너뛰기</a>
+  </li>
+  <li>   
+    <a href='/boards/target/<%= (last_page + 1) %>'> 다음으로 건너뛰기</a>
+  </li>
+  </ul>
+  </div>
     <button onclick="location.href='/boards/write'">글작성</button>
     <form action="/boards/cleaner" method="post">
       <button type="submit">클리너</button>
     </form>
-
   </body>
 </html>

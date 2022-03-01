@@ -168,7 +168,7 @@ const boards = {
       postsModel.insertPost(data, (result) => {
         if (result) {
           // console.log(result);
-          res.redirect('/boards/list');
+          res.redirect('/boards/list/' + 1);
         } else {
           res.redirect('/boards/write');
         }
@@ -243,9 +243,9 @@ const boards = {
       postsModel.deletePost(id, (result) => {
         if (result) {
           console.log(result);
-          res.redirect(`/boards/list`);
+          res.redirect('/boards/list/' + 1);
         } else {
-          res.redirect(`/boards/list`);
+          res.redirect('/boards/list/' + 1);
         }
       });
     } catch (error) {}

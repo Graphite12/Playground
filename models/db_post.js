@@ -1,4 +1,3 @@
-import run from '../config/mysql_pool.js';
 import db_config from '../config/mysql.js';
 import moment from 'moment';
 

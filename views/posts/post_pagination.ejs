@@ -6,14 +6,16 @@
     <title>페이지네이션</title>
   </head>
   <body>
-   
-    <table border="1">
+    <h1>무슨 게시판</h1>
+    <% if(total_post_count !== 0) { %>
+       <table border="1">
       <colgroup>
-        <col width="50" />
-        <col width="200" />
-        <col width="100" />
+        <col width="70" />
+        <col width="250" />
+        <col width="110" />
         
       </colgroup>
+   
       <thead>
         <tr>
           <th>ID</th>
@@ -23,8 +25,7 @@
         </tr>
       </thead>
       <tbody> 
-        <% if(total_post_count !== 0) { %>
-         <% data.forEach((lis, index) => { %>
+       <% data.forEach((lis, index) => { %>
          <tr>
           <td><%= lis.id %></td>
           <td>
@@ -35,25 +36,36 @@
          </tr>
          <% }) %>
         <% } else { %>
-          <tr>
-            <td>등록된 글이 없습니다.</td>
-            <td>새로 글을 입력해주세요.</td>
-          </tr>
-        <% } %>
+          <div>
+            <h2>등록된 글이 없습니다.</h2>
+            <h1>새로 글을 입력해주세요.</h1>
+          </div>
       </tbody>
+      <% } %>
     </table border='1'>
   <div>
+    <div>
   <ul> 
     <% for(let i = start_page; i <= end_page; i++) { %> 
-      <li value="<%= i %>" >
+      <% if(start_page < 1) { %>
         <a href="/boards/list/<%= i %>"><%= i %></a>
-      </li>
+      <% } %>  
+      <li value="<%= i %>" >
+      <% if(i === curr_page) { %> 
+       <a href="/boards/list/<%= i %>"><b><%= i %></b></a>
+      <% } else { %>
+       <a href="/boards/list/<%= i %>"><%= i %></a>
+      <% } %>
+    </li>
     <% } %>
   </ul>
   </div>
-    <button onclick="location.href='/boards/write'">글작성</button>
+  </div>
+  <div>
+    <button onclick="location.href='/boards/write'">글쓰기</button>
     <form action="/boards/cleaner" method="post">
       <button type="submit">클리너</button>
     </form>
+  </div>
   </body>
 </html>

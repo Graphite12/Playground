@@ -1,5 +1,8 @@
 import run from '../config/mysql_pool.js';
 import db_config from '../config/mysql.js';
+import moment from 'moment';
+
+const today = moment().format('YYYY-MM-DD||hh:mm:ss');
 const mysqlConn = db_config.init();
 //연결 확인
 db_config.connect(mysqlConn);
@@ -19,6 +22,7 @@ const postsModel = {
       if (error) {
         throw new Error(error);
       } else {
+        console.log('오늘' + today);
         // console.log('db. row를 까보자');
         // console.log(rows);
         // console.log(fields);
@@ -37,10 +41,9 @@ const postsModel = {
     //Offset Limit 설정해서 긁어오기
     let sql2 = `SELECT * FROM POSTS ORDER BY id LIMIT 0, 20`;
     //JOIN 페이징
-    let sql3 = `SELECT * FROM POSTS AS p JOIN (SELECT id FROM POSTS LIMIT 0, 20) AS t ON p.id = t.id ORDER BY p.id DESC`;
+    let sql3 = `SELECT * FROM POSTS AS p JOIN (SELECT id FROM POSTS ORDER BY id DESC LIMIT 0, 20) AS t ON p.id = t.id `;
     // 커버링 인덱스 사용법(이방법은 테이블 수정 이후 가능)
     let sql4 = `SELECT id, post_no, post_type, name FROM POSTS WHERE created_at >= 2000-01-01 LIMIT 500000, 10`;
-
     mysqlConn.query(sql3, (error, rows) => {
       if (error) {
         throw new Error(error);
@@ -53,7 +56,8 @@ const postsModel = {
   },
 
   /**
-   * 서브 페이지네이션
+   * 컨텐츠 페이지 네이션
+   *
    * @param {*} data
    * @param {*} ctrl
    */
@@ -99,7 +103,7 @@ const postsModel = {
    * @param {*} cb
    */
   insertPost: (data, cb) => {
-    let sql = `INSERT INTO POSTS (name, subject, content, created_at) VALUES (?, ?, ?, NOW())`;
+    let sql = `INSERT INTO POSTS (name, subject, content, created_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)`;
     let params = [data.name, data.subject, data.content];
 
     mysqlConn.query(sql, params, (error, results, fields) => {
@@ -140,8 +144,14 @@ const postsModel = {
    */
 
   updatePost: (data, cb) => {
-    const sql = `UPDATE POSTS SET name = ?, subject = ?, content = ?, updated_at = NOW() WHERE id = ?`;
-    const params = [data.id, data.name, data.subject, data.content];
+    const sql = `UPDATE POSTS SET name = ?, subject = ?, content = ?, updated_at = ? WHERE id = ?`;
+    const params = [
+      data.id,
+      data.name,
+      data.subject,
+      data.content,
+      CURRENT_TIMESTAMP,
+    ];
     mysqlConn.query(sql, params, (error, results, fields) => {
       if (error) {
         throw new Error(error);

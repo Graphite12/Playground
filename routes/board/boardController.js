@@ -32,39 +32,41 @@ const boards = {
    * @param {*} res
    */
   getListPagination: (req, res) => {
+    /* 현재 페이지 */
+    const curr_page = Number(req.params.page);
+    /* 페이지 당 출력될 게시글 수 */
+    const page_content_count = 10;
+    /* 페이지 버튼 개수 */
+    const page_list_count = 10;
+    /* Limit */
+    let limits = 0;
     try {
       postsModel.renderPagination((result) => {
         /* 작성된 글 총 개수 */
         let total_post_count = result.length;
-        /* 페이지 당 출력될 게시글 수 */
-        const content_page_size = 10;
-        /* 페이지 버튼 개수 */
-        const list_page_size = 10;
-        /* Limit */
-        let limits = 0;
-        /* 현재 페이지 */
-        const curr_page = req.params.page;
+
         /* 전체 페이지 수 */
-        const total_page = Math.ceil(total_post_count / content_page_size);
-        /* 저체 세트 수 */
-        const total_target = Math.ceil(total_page / list_page_size);
+        const total_page = Math.ceil(total_post_count / page_content_count);
+        /* 전체 세트 수 */
+        const total_target = Math.ceil(total_page / page_list_count);
         /* 현제 세트 번호 */
-        const curr_target = Math.ceil(curr_page / list_page_size);
+        const curr_target = Math.ceil(curr_page / page_list_count);
         /* 현재 세트 번호 시작 페이지 */
-        const start_page = (curr_target - 1) * list_page_size + 1;
+        const start_page = (curr_target - 1) * page_list_count + 1;
         /* 현제 세트 번호 마지막 페이지 */
-        const end_page = start_page + list_page_size - 1;
+        const end_page = start_page + page_list_count - 1;
 
         if (total_post_count < 0) total_post_count = 0;
+
         if (curr_page < 0) {
           limits = 0;
         } else {
-          limits = (curr_page - 1) * content_page_size;
+          limits = (curr_page - 1) * page_content_count;
         }
 
         const data = {
           offset: limits,
-          limit: content_page_size,
+          limit: page_content_count,
         };
 
         postsModel.renderLOPage(data, (result) => {
@@ -74,21 +76,30 @@ const boards = {
           console.log(req.body);
           console.log('페이지네이션 쿼리');
           console.log(req.query);
+          console.log('페이지네이션 쿼리');
           console.log(total_post_count);
-          console.log(content_page_size);
-          console.log(list_page_size);
+          console.log('페이지네이션 쿼리');
+          console.log(page_content_count);
+          console.log('페이지네이션 쿼리');
+          console.log(page_list_count);
+          console.log('페이지네이션 쿼리');
           console.log(curr_page);
+          console.log('페이지네이션 쿼리');
           console.log(total_page);
+          console.log('페이지네이션 쿼리');
           console.log(total_target);
+          console.log('현재 페이지');
           console.log(curr_target);
+          console.log('첫 페이지');
           console.log(start_page);
+          console.log('마지막 페이지');
           console.log(end_page);
 
           res.render('posts/post_pagination.ejs', {
             data: result,
             total_post_count,
-            content_page_size,
-            list_page_size,
+            page_content_count,
+            page_list_count,
             curr_page,
             total_page,
             total_target,

@@ -1,17 +1,13 @@
 import mysql from 'mysql2';
-import 'dotenv/config';
-
-const db = {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PWD,
-  database: process.env.DB_NAME,
-};
+// import path from 'path';
+// import dotenv from 'dotenv';
+// const __dirname = path.resolve();
+// dotenv.config({ path: path.join(__dirname, '.env/.env.development') });
+import { mysql_config } from './dotenv_config.js';
 
 const db_config = {
   init: () => {
-    return mysql.createConnection(db);
+    return mysql.createConnection(mysql_config);
   },
   connect: (conn) => {
     conn.connect((err) => {

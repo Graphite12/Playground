@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise';
-import 'dotenv/config';
+
 /**
  * A. createConnection
  */
@@ -56,4 +56,8 @@ let test = new Promise((resolve, rejected) => {
 });
 /**
  * createPool
+ */
+
+/**
+ * PromiseWrapper
  */

@@ -1,3 +1,4 @@
+import pool from '../../config/mysql_promise.js';
 import postsModel from '../../models/db_post.js';
 
 const boards = {
@@ -36,8 +37,7 @@ const boards = {
     const curr_page = Number(req.params.page);
     /* 페이지 당 출력될 게시글 수 */
     const page_content_count = 10;
-    /* 페이지 버튼 개수 */
-    const page_list_count = 10;
+
     /* Limit */
     let limits = 0;
     try {
@@ -47,6 +47,8 @@ const boards = {
 
         /* 전체 페이지 수 */
         const total_page = Math.ceil(total_post_count / page_content_count);
+        /* 페이지 버튼 개수 */
+        const page_list_count = total_page;
         /* 전체 세트 수 */
         const total_target = Math.ceil(total_page / page_list_count);
         /* 현제 세트 번호 */

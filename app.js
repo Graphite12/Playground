@@ -5,6 +5,7 @@ import mainRouter from './routes/main/mainRoute.js';
 import path from 'path';
 import boardRouter from './routes/board/boardRoute.js';
 import methodOverride from 'method-override';
+import { Server } from 'socket.io';
 
 /**
  * __dirname을 활용
@@ -48,7 +49,25 @@ app.use('/boards', boardRouter);
 // app.use('/system');
 
 /* http 실행 */
-http.createServer(app).listen(8080);
+const server = http.createServer(app);
 
+let io = new Server(server);
+
+/* Socketio */
+io.on('connection', (soc) => {
+  console.log(soc);
+
+  soc.emit('usercnt', io.engine.clientsCount);
+
+  soc.on('message', (msg) => {
+    console.log('사용자 메세지', msg);
+
+    io.emit('사용자메세지', msg);
+  });
+});
+
+server.listen(8080, () => {
+  console.log('로그인 성공');
+});
 /* https 실행 */
 // https.createServer().listen(8443);

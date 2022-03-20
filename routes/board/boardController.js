@@ -1,4 +1,3 @@
-import pool from '../../config/mysql_promise.js';
 import postsModel from '../../models/db_post.js';
 
 const boards = {

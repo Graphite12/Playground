@@ -40,5 +40,5 @@ MVC는 Model, View, Controller로 나뉘어, 소프트웨어 구조를 좀더 �
 
 ## STACK 및 Library or Framework
 
-`JavaScript`,`HTML`,`nodeJS`,`ejs`,`express`,`http`,`https`,`passport`,`jsonwebtoken`,`mysql`,`mysql2`,`nodemon`,`qs`,`method-override`
+`JavaScript`,`HTML`,`nodeJS`,`ejs`,`express`,`http`,`https`,`passport`,`jsonwebtoken`,`mysql`,`mysql2`,`nodemon`,`qs`,`method-override`,`socket.io`
 

@@ -1,12 +1,10 @@
-import { text } from 'express';
+const chat_form = document.querySelector('.chatform-box');
+const text_box = document.querySelector('.text-box');
 
 const liveinvader = () => {
   let socket = io('http://localhost:8080');
 
-  const chatform = document.querySelector('.chatform-box');
-  const msgbox = document.querySelector('.text-box');
-
-  chatform.addEventListener('submit', (e) => {
+  chat_form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const msg = e.target.msg.value;
@@ -17,6 +15,12 @@ const liveinvader = () => {
   const uploadMsg = (msg) => {};
 
   socket.on('message', (msg) => {
-    msgbox.appendChild(uploadMsg());
+    text_box.appendChild(uploadMsg());
   });
+};
+
+const login = (username, password) => {
+  let socket = io();
+
+  socket.emit('enteruser', { username, password });
 };

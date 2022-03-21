@@ -1,11 +1,13 @@
 import express from 'express';
-import http from 'http';
+import { createServer } from 'http';
 import https from 'https';
-import mainRouter from './routes/main/mainRoute.js';
 import path from 'path';
+import mainRouter from './routes/main/mainRoute.js';
+import liveRouter from './routes/chat/liveRoute.js';
 import boardRouter from './routes/board/boardRoute.js';
 import methodOverride from 'method-override';
 import { Server } from 'socket.io';
+import liveinvaderController from './routes/chat/liveinvaderController.js';
 
 /**
  * __dirname을 활용
@@ -31,13 +33,15 @@ app.use(express.json());
 */
 app.use(express.urlencoded({ extended: true }));
 /**
- * PUT, DELETE 사용
- *
+ * CRUD 구현을 위한 PUT, DELETE 사용
+ * (methodOverride 미사용시 get, post만 사용 가능)
  */
 app.use(methodOverride('_method'));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views/'));
+
+/* Cors(Cross Origin) */
 
 // app.use('/', (req, res) => {
 //   res.send('hello');
@@ -46,28 +50,40 @@ app.set('views', path.join(__dirname, 'views/'));
 /* 라우트 설정 */
 app.use(mainRouter);
 app.use('/boards', boardRouter);
+app.use(liveRouter);
 // app.use('/system');
 
 /* http 실행 */
-const server = http.createServer(app);
+const httpServer = createServer(app);
 
-let io = new Server(server);
+// Server생성자 함수를 활용해 http를 socketio서버로 실행
+let io = new Server(httpServer);
 
 /* Socketio */
-io.on('connection', (soc) => {
-  console.log(soc);
+/**
+ * io.on('connection', {})
+ */
+io.on('connection', (socket) => {
+  console.log('socketio 연결 성공');
+  console.log(socket);
 
-  soc.emit('usercnt', io.engine.clientsCount);
+  //liveinvaderController(socket);
 
-  soc.on('message', (msg) => {
+  socket.on('message', (msg) => {
     console.log('사용자 메세지', msg);
-
-    io.emit('사용자메세지', msg);
   });
 });
 
-server.listen(8080, () => {
+httpServer.listen(8080, () => {
   console.log('로그인 성공');
 });
 /* https 실행 */
-// https.createServer().listen(8443);
+/**
+ * https ssl 인증서 옵션
+ *
+ * const sslOption = {
+ *  key: ...,
+ *  pem: ...
+ * }
+ */
+// https.createServer(ssloption).listen(8443, ()=>{});

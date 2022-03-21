@@ -1,5 +1,5 @@
 import db_config from '../config/mysql.js';
-import pool from '../config/mysql_pool.js';
+import { pool, getConnection } from '../config/mysql_pool.js';
 import moment from 'moment';
 
 const today = moment().format('YYYY-MM-DD||hh:mm:ss');
@@ -7,7 +7,6 @@ const mysqlConn = db_config.init();
 //연결 확인
 db_config.connect(mysqlConn);
 
-//run();
 const postsModel = {
   /**
    * 게시글 리스트
@@ -34,8 +33,14 @@ const postsModel = {
 
     /* mysql2 비동기적 코드 */
     const [item, fields] = await pool.query(sql3);
-
     await ctrl(item);
+
+    /* getConnection 사용 시  */
+    // getConnection(async (conn) => {
+    //   const [item, fields] = await conn.query(sql3);
+    //   await ctrl(item)
+    //   conn.release();
+    // });
   },
 
   /**
@@ -67,6 +72,13 @@ const postsModel = {
     const [item, fields] = await pool.query(sql3);
 
     await ctrl(item);
+
+    /* getConnection 사용 시  */
+    // getConnection(async (conn) => {
+    //   const [item, fields] = await pool.query(sql3);
+    //   await ctrl(item)
+    //   conn.release();
+    // });
   },
 
   /**

@@ -56,10 +56,13 @@ app.use(liveRouter);
 /* http 실행 */
 const httpServer = createServer(app);
 
-// http를 socketio서버로 실행
+// Server생성자 함수를 활용해 http를 socketio서버로 실행
 let io = new Server(httpServer);
 
 /* Socketio */
+/**
+ * io.on('connection', {})
+ */
 io.on('connection', (socket) => {
   console.log('socketio 연결 성공');
   console.log(socket);

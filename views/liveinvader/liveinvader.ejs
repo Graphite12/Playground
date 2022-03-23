@@ -3,15 +3,17 @@
   <meta charset="utf-8" />
   <title>Live Invader에서 재미를 누려보자</title>
   <!-- socket.io 를 Global영역으로 가져와 사용 -->
-  <script defer src="/socket.io/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <!-- socket.io 를 활용한 코드 -->
-  <script defer src="./liveinvader.js"></script>
+  <script src="/static/js/liveinvader.js" type="module"></script>
 </head>
 <body>
-  <section id="usercnt-area"><span></span></section>
+  <h1><%= title %></h1>
+  <section id="usercnt-area"><span>dd</span></section>
   <section id="msg-area">
     <ul class="text-box"></ul>
   </section>
+
   <section id="chatform-area">
     <form action="" class="chatform-box">
       <input id="msg" class="input-text" autocomplete="off" />

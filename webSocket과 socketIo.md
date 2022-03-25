@@ -19,6 +19,8 @@ SocketIO는
 
 ### SocketIO 셋팅
 
+#### 서버 소스코드
+
 ```js
 import http from 'http';
 import express from 'express';
@@ -31,4 +33,53 @@ let io = new Server(server);
 server.listen(3000);
 ```
 
+#### 클라이언트 소스 코드
+
+```html
+<head>
+  <meta .... />
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    //source code
+  </script>
+</head>
+
+<body>
+  <!-- 바디에다 script 태크 작성해도됨 -->
+</body>
+```
+
+```js
+const chat_form = document.querySelector('.chatform-box');
+const input = document.querySelector('.input-text');
+const text_box = document.querySelector('.text-box');
+// import { io } from 'socket.io-client';
+
+/* 클라이언트 연결 */
+let socket = io();  //socket.io 서버에 연결
+
+socket.on('connect', () => {
+  console.log('클라이언트 연결 성공');
+});
+
+input.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  if (!input.value) {
+    socket.emit('error ');
+  }
+  console.log(e);
+  /* message 이벤트 발생 */
+  socket.emit('message', input.value);
+
+  input.value = '';
+});
+
+socket.on('disconnect', () => {
+  console.log('클라이언트 닫기 성공')
+}
+```
+
 ### SocketIO 옵션
+
+### SocketIO NameSpace

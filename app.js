@@ -64,10 +64,6 @@ const ws = new Server(httpServer, {
   },
 });
 
-ws.on('connection', (soc) => {
-  console.log('ws 연결 성공 ');
-});
-
 httpServer.listen(port, () => {
   console.log(`연결 성공! *:${port}`);
 });
@@ -93,23 +89,23 @@ httpServer.listen(port, () => {
 /**
  * io는 socket.io를 Import한 변수
  * io.on('connection', {})
- 
  */
 
-// ws.on('connection', (socket) => {
-//   console.log('socketio 연결 성공');
-//   console.log(socket);
+ws.on('connection', (socket) => {
+  console.log('socketio 연결 성공');
+  // console.log(socket);
 
-//   //liveinvaderController(socket);
+  //liveinvaderController(socket);
 
-//   /* 이벤트 생성 및 연결  */
-//   socket.on('message', (msg) => {
-//     console.log('사용자 메세지', msg);
+  /* 이벤트 생성 및 연결  */
 
-//     ws.emit('message', msg);
-//   });
+  socket.on('message', (msg) => {
+    console.log('사용자 메세지', msg);
 
-//   socket.on('disconnect', () => {
-//     console.log('사용자 연결 종료');
-//   });
-// });
+    ws.emit('message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('사용자 연결 종료');
+  });
+});

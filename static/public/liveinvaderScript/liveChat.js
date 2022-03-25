@@ -2,77 +2,40 @@ const chat_form = document.querySelector('.chatform-box');
 const inputField = document.querySelector('.input-text');
 const message_box = document.querySelector('.text-box');
 const listen_chat = document.querySelector('.listen-chat');
-const room_list = document.querySelector('#room-list');
-
+const room_list = document.querySelector('.room-list');
+const user_list = document.querySelector('.user-list');
+const users_list = document.querySelector('.users-list');
+const create_room_form = document.querySelector('.create_room');
+const create_room_btn = document.querySelector('.create_chat_room');
+// const userInput = document.querySelector('.username-input');
+const room_subject_input = document.querySelector('.chat_room_subject_input');
 // import { io } from 'socket.io-client';
 
 /* 클라이언트 연결 */
 let socket = io(); //socket.io 서버에 연결
+let current_room;
+let current_userName;
+/* 사용자 채팅방 생성 */
+create_room_btn.addEventListener('click', () => {
+  const sbj = room_subject_input.value;
+  let roomLi = document.createElement('li');
 
-socket.on('connect', () => {
-  console.log('클라이언트 연결 성공');
-});
-
-socket.on('joinRoom', { username, room });
-
-// 서버로부터 메세지 수신 받고 html그려넣기
-socket.on('message', (data) => {
-  let new_message = document.createElement('li');
-  const { username, text, time } = data;
-
-  let textbox = `
-  <div>
-    <div>${username}, ${time}</div>
-    <div>${text}</div>
-  </div>
-  `;
-
-  console.log(textbox);
-
-  new_message.textContent = textbox;
-  message_box.appendChild(new_message);
-});
-
-// 입력 버튼이 눌리면, 서버로 메세지 전송
-chat_form.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  if (!inputField.value) {
-    console.log('메세지를 입력하세요.');
-    return;
-  }
-  console.log(e);
-  /* message라는 이벤트에 담긴 내용을 서버로 전달 */
-  socket.emit('chatMessage', inputField.value);
-
-  inputField.value = '';
-});
-
-inputField.addEventListener('keyup', () => {
-  socket.emit('typing', {
-    isTyping: inputField.value.length > 0,
+  socket.emit('create_room', { subject: sbj }, (data) => {
+    current_room = data.room_id;
+    roomLi.textContent(current_room);
   });
 });
 
-socket.on('typing', (isTyping) => {
-  const { isTyping } = isTyping;
-  if (!isTyping) {
-    listen_chat.textContent = '';
-    return;
-  }
+/* 사용자 추가 */
 
-  listen_chat.textContent = `<p>님이 입력중입니다.</p>`;
-});
+/* 사용자 접속 */
+function joinRoom(room) {
+  socket.emit('join_room', { room_id: room.id }, (data) => {});
+}
+/* 사용자 메세지 입력 */
+socket.emit('chatting', (msg) => {});
 
-const createRoom = (data) => {
-  const roomName = document.createElement('li');
+/* 사용자 비밀 메세지 입력 */
 
-  roomName.textContent = data;
-};
-
-const deleteRoom = (data) => {};
-// socket.on('message', (data) => {});
-
-socket.on('disconnect', () => {
-  console.log('클라이언트 닫기 성공');
-});
+/* 사용자 연결 종료 */
+socket.emit('');

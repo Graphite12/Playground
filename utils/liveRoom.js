@@ -1,20 +1,59 @@
-const roomList = [];
+const listRoom = [];
+const active_users = [];
 
-const roomOption = {
+const liveRoom = {
   /* 방 중복 여부 검사 */
   existRoom: (subject) => {
     // let isExist = false;
 
-    roomList.some((exist) => {
-      return roomList.indexOf(exist) !== roomList.lastIndexOf(exist);
-    });
+    roomLists.findIndex((exist) => {});
 
     return roomList;
   },
 
-  createRoom: (data) => {
-    roomList.push(data);
+  existRoomUsers: (user) => {
+    users.filter((uname) => {
+      if (uname.id === user.id) {
+        return;
+      }
+    });
+  },
+  activeUserCnt: () => {
+    users.length;
+  },
+
+  addUser: (user) => {
+    active_users.push(user);
+  },
+
+  exitUser: (user) => {},
+  kickUser: (user) => {},
+  banUser: (user) => {},
+
+  createRoom: (subject, id, owner) => {
+    let room = { subject, id, owner };
+    roomLists.push(room);
+    return room;
   },
 
   deleteRoom: () => {},
 };
+
+class LiveRoom {
+  constructor(subject, id, owner) {
+    this.subject = subject;
+    this.id = id;
+    this.owner = owner;
+    this.userList = [];
+    this.banList = [];
+    this.password = null;
+    this.protected = false;
+  }
+  isAvailable() {}
+  isProtected() {}
+  addUsers() {}
+  kickUsers() {}
+  banUsers() {}
+}
+
+export { liveRoom, LiveRoom, listRoom };

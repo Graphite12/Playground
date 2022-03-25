@@ -10,7 +10,7 @@ liveRouter.get('/', (req, res) => {
   res.render('liveinvader/liveMain.ejs', { title: 'RTC 채팅 구현' });
 });
 
-liveRouter.get('/chat', (req, res) => {
+liveRouter.post('/chat', (req, res) => {
   res.render('liveinvader/liveChat.ejs', {
     title: 'RTC 채팅 구현',
   });

@@ -1,6 +1,8 @@
 const chat_form = document.querySelector('.chatform-box');
 const inputField = document.querySelector('.input-text');
 const message_box = document.querySelector('.text-box');
+const listen_chat = document.querySelector('.listen-chat');
+const room_list = document.querySelector('#room-list');
 
 // import { io } from 'socket.io-client';
 
@@ -11,12 +13,23 @@ socket.on('connect', () => {
   console.log('클라이언트 연결 성공');
 });
 
+socket.on('joinRoom', { username, room });
+
 // 서버로부터 메세지 수신 받고 html그려넣기
 socket.on('message', (data) => {
-  console.log('클라이언트 측:' + data);
   let new_message = document.createElement('li');
+  const { username, text, time } = data;
 
-  new_message.textContent = data;
+  let textbox = `
+  <div>
+    <div>${username}, ${time}</div>
+    <div>${text}</div>
+  </div>
+  `;
+
+  console.log(textbox);
+
+  new_message.textContent = textbox;
   message_box.appendChild(new_message);
 });
 
@@ -30,11 +43,34 @@ chat_form.addEventListener('submit', (e) => {
   }
   console.log(e);
   /* message라는 이벤트에 담긴 내용을 서버로 전달 */
-  socket.emit('message', inputField.value);
+  socket.emit('chatMessage', inputField.value);
 
   inputField.value = '';
 });
 
+inputField.addEventListener('keyup', () => {
+  socket.emit('typing', {
+    isTyping: inputField.value.length > 0,
+  });
+});
+
+socket.on('typing', (isTyping) => {
+  const { isTyping } = isTyping;
+  if (!isTyping) {
+    listen_chat.textContent = '';
+    return;
+  }
+
+  listen_chat.textContent = `<p>님이 입력중입니다.</p>`;
+});
+
+const createRoom = (data) => {
+  const roomName = document.createElement('li');
+
+  roomName.textContent = data;
+};
+
+const deleteRoom = (data) => {};
 // socket.on('message', (data) => {});
 
 socket.on('disconnect', () => {

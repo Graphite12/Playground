@@ -82,4 +82,59 @@ socket.on('disconnect', () => {
 
 ### SocketIO 옵션
 
+- 브로드캐스트
+  나 자신을 제외한 모두에게 메세지를 보낸다.(네트워크의 브로드캐스트라고 생각)
+  `socket.broadcast.emit('이벤트명', '메세지')`
+
+- 특정인에게
+  `io.to(socketid).emit('이벤트명', '메세지)`
+
 ### SocketIO NameSpace
+
+sockeio에도 namespace라는 개념이 있는데, 서로 다른 엔드포인트, path를 할당할 떄 사용한다. Default Namespace는 `/` 을 사용한다.
+
+#### 사용자지정 Namespace
+
+- 서버
+
+```js
+let newRoom = io.of('/chat_room');
+
+newRoom.on('connection', (socket) => {
+  console.log('enjoy chat');
+});
+
+nswRoom.emit('인삿말', '안녕하세요! 반갑습니다.');
+```
+
+- 클라이언트
+  지정된 Namespace로 접속한다.
+
+```js
+let newRoom = io('/chat_room');
+```
+
+#### ROOM
+
+Room은 네임스페이스 안에 특정한 채널을 구현한다. 말 그대로 채팅방이라 생각하면 되고, `Join`과 `Leave`를 활용하여 ROOM을 왔다갔다 할 수 있다.
+
+ROOM은 백엔드에서 관리한다.
+
+- `socket.join()`
+  특정 룸 접속
+
+```js
+io.on('connection', (socket) => {
+  socket.join('room');
+});
+```
+
+- `io.to(room).emit('이벤트', 내용)`
+
+같은 룸 내에 존재하는 사용자들에게 통신
+
+```js
+io.to('room').emit('message', '메세지');
+```
+
+- `socket.leave()`

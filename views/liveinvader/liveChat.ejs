@@ -5,15 +5,21 @@
   <!-- socket.io 를 Global영역으로 가져와 사용 -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- socket.io 를 활용한 코드 -->
-  <script defer src="/static/public/liveinvaderScript/liveinvader.js"></script>
+  <script
+    defer
+    src="/static/public/liveinvaderScript/liveChat.js"
+    type="module"
+  ></script>
 </head>
 <body>
   <h1><%= title %></h1>
   <section id="usercnt-area"><span>dd</span></section>
   <section id="msg-area">
-    <ul class="text-box"></ul>
+    <div>
+      <span class="listen-chat"></span>
+      <ul class="text-box"></ul>
+    </div>
   </section>
-
   <section id="chatform-area">
     <form action="" class="chatform-box">
       <input

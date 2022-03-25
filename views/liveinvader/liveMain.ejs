@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+  <!-- socket.io 를 Global영역으로 가져와 사용 -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- socket.io 를 활용한 코드 -->
+  <script
+    defer
+    src="/static/public/liveinvaderScript/liveChat.js"
+    type="module"
+  ></script>
+</head>
+<body>
+  <header>
+    <h1>라이브 인베이더</h1>
+  </header>
+  <form action="/liveinvader/chat">
+    <article>
+      <label for="username">사용자 이름</label>
+      <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="사용자 이름을 입력하세요."
+        required
+      />
+    </article>
+    <article>
+      <ul id="room-list"></ul>
+      <form>
+      <button>추가</button>
+      <button>삭제</button>
+    </form>
+      <article type="submit">채팅입장</button>
+    </article>
+  </form>
+</body>

@@ -9,6 +9,10 @@ import methodOverride from 'method-override';
 import { Server } from 'socket.io';
 //import liveinvaderController from './routes/chat/liveinvaderController.js';
 
+/* 유틸 */
+import formatMsgTime from './utils/liveMessage.js';
+import liveUser from './utils/liveUser.js';
+
 let port = process.env.SPORT || 8080;
 
 /**
@@ -64,10 +68,6 @@ const ws = new Server(httpServer, {
   },
 });
 
-ws.on('connection', (soc) => {
-  console.log('ws 연결 성공 ');
-});
-
 httpServer.listen(port, () => {
   console.log(`연결 성공! *:${port}`);
 });
@@ -93,23 +93,102 @@ httpServer.listen(port, () => {
 /**
  * io는 socket.io를 Import한 변수
  * io.on('connection', {})
- 
  */
 
-// ws.on('connection', (socket) => {
-//   console.log('socketio 연결 성공');
-//   console.log(socket);
+const { joinUser, getCurrentUser, leaveUser, getJoinedUser } = liveUser;
 
-//   //liveinvaderController(socket);
+ws.on('connection', (socket) => {
+  console.log('socketio 연결 성공');
+  // console.log(socket);
 
-//   /* 이벤트 생성 및 연결  */
-//   socket.on('message', (msg) => {
-//     console.log('사용자 메세지', msg);
+  //liveinvaderController(socket);
 
-//     ws.emit('message', msg);
-//   });
+  /* 이벤트 생성 및 연결(Base) */
 
-//   socket.on('disconnect', () => {
-//     console.log('사용자 연결 종료');
-//   });
-// });
+  // 전체 메세지
+
+  //접속자 제외한 모든 사용자에게 메세지
+  // socket.broadcast.emit('message');
+
+  // socket.on('chatMessage', (msg) => {
+  //   ws.emit('message', '메세지')
+  // });
+
+  // socket.on('disconnect', () => {
+  //   console.log('사용자 연결 종료');
+  // });
+
+  /* 방법A. Room */
+  const botName = 'LI Bot';
+
+  socket.on('createRoom', (data) => {
+    let existRoom = roomOption.existRoom(data);
+
+    if (existRoom !== false) {
+      socket.leave(socket.room);
+      socket.join(data.roomName);
+      socket.room = data.roomName;
+    }
+  });
+
+  socket.on('joinRoom', (username, room) => {
+    console.log('사용자id' + socket.id);
+    //접속한 클라이언트 정보 저장 및 변수에 담기
+    const user = joinUser(socket.id, username, room);
+
+    //채팅방 접속
+    socket.join(user.room);
+
+    //채팅방에 접속한 유저 환영인사 (관리자, 메세지, 시간 출력)
+    socket.broadcast
+      .to(user.room)
+      .emit(
+        'message',
+        formatMsgTime(botName, `${user.username}님이 채팅방에 참여하셨습니다.`),
+      );
+
+    // 접속한 모든 유저에게 해당 룸에 접속유저 기록
+    ws.to(user.room).emit('roomUsers', {
+      room: user.room,
+      users: getJoinedUser(user.room),
+    });
+
+    // 사용자가 속한 방에만 메세지 등록
+    socket.on('chatMessage', (msg) => {
+      const user = getCurrentUser(socket.id);
+
+      ws.to(user.room).emit('message', formatMsgTime(user.username, msg));
+    });
+
+    socket.on('disconnect', () => {
+      const user = leaveUser(socket.id);
+
+      if (user) {
+        ws.to(user.room).emit(
+          'message',
+          formatMsgTime(botName, `${user.username}님이 방을 나갔습니다.`),
+        );
+
+        ws.to(user.room).emit('roomUsers', {
+          room: user.room,
+          users: getJoinedUser(user.room),
+        });
+      }
+    });
+
+    socket.on('typing', (data) => {
+      socket.broadcast.emit('typing', data);
+    });
+  });
+});
+
+/* 방법B. Namespace */
+const chat1 = ws.of('/livechat1');
+chat1.on('connection', (socket) => {
+  chat1.emit('livechat1', { chat: 'someone chat1' });
+});
+
+const chat2 = ws.of('/livechat2');
+chat2.on('connection', (socket) => {
+  chat2.emit('livechat2', { chat: 'someone chat2' });
+});

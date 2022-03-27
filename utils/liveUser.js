@@ -1,12 +1,53 @@
 const lusers = [];
 
+function existClientIdAndUssername(id, username) {
+  let isExists = false;
+  let oldUser;
+  let oldUserName;
+
+  lusers.findIndex((uid) => {
+    if (uid === undefined) {
+      lusers.push(id, username);
+    }
+
+    if (uid.id === id) {
+      isExists = true;
+      oldUser = id;
+    }
+
+    if (uid.username === username) {
+      isExists = true;
+      oldUserName = username;
+    }
+
+    if (isExists) {
+      return {
+        status: {
+          oldUser,
+          oldUserName,
+          success: false,
+          message: '이미 가입된 계정이거나, 닉네임이 중복되었습니다.',
+        },
+      };
+    } else {
+      return {
+        status: {
+          success: true,
+        },
+      };
+    }
+  });
+}
+
 // 일반 변수
 const LiveUsers = {
   createUsers: (id, username) => {
+    // let isExists = existClientIdAndUssername(id, username);
+    // console.log('중복여부체크:' + isExists);
+
     const user = { id, username };
-
     lusers.push(user);
-
+    console.log('서버사용자:' + JSON.stringify(lusers));
     return user;
   },
   getCurrentUser: (id) => {
@@ -78,4 +119,4 @@ class LiveUserList {
   }
 }
 
-export { LiveUser, LiveUserList, LiveUsers };
+export { LiveUser, LiveUserList, LiveUsers, lusers };

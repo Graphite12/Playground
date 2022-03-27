@@ -1,30 +1,34 @@
 <!DOCTYPE html>
-<head> </head>
-<body>
-  <header>
-    <h1>라이브 인베이더</h1>
-  </header>
-  <div>
-    <ul class="users-list"></ul>
-    <ul class="room-list"></ul>
-  </div>
-
-  <form class="create_room">
-    <article>
-      <label for="chat_room_subject_input">생성할 방 제목</label>
-      <input
-        type="text"
-        class="chat_room_subject_input"
-        id="chat_room_subject_input"
-        placeholder="생성할 방 이름 입력"
-        maxlength="30"
-        required
-      />
-    </article>
-    <button type="button" class="create_chat_room">방 생성</button>
-  </form>
-  <form action="/liveinvader/chat" method="post">
-    <!-- <article>
+<html>
+  <head> </head>
+  <body>
+    <header>
+      <h1>라이브 인베이더</h1>
+    </header>
+    <aside>
+      <div>
+        <h1>접속자</h1>
+        <ul class="all-user-list"></ul>
+      </div>
+      <ul class="room-list"></ul>
+    </aside>
+    <div><%- include('./liveRegisterForm') %></div>
+    <form class="create_room">
+      <article>
+        <label for="chat_room_subject_input">생성할 방 제목</label>
+        <input
+          type="text"
+          class="chat_room_subject_input"
+          id="chat_room_subject_input"
+          placeholder="생성할 방 이름 입력"
+          maxlength="30"
+          required
+        />
+      </article>
+      <button type="button" class="create_chat_room">방 생성</button>
+    </form>
+    <form action="/liveinvader/chat" method="post">
+      <!-- <article>
       <label for="username">사용자 이름</label>
       <input
         type="text"
@@ -35,13 +39,14 @@
         required
       />
     </article> -->
-    <button type="submit">채팅입장</button>
-  </form>
-  <!-- socket.io 를 Global영역으로 가져와 사용 -->
-  <script src="/socket.io/socket.io.js"></script>
-  <!-- socket.io 를 활용한 코드 -->
-  <script
-    src="/static/public/liveinvaderScript/liveChat.js"
-    type="module"
-  ></script>
-</body>
+      <button type="submit">채팅입장</button>
+    </form>
+    <!-- socket.io 를 Global영역으로 가져와 사용 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- socket.io 를 활용한 코드 -->
+    <script
+      src="/static/public/liveinvaderScript/liveChat.js"
+      type="module"
+    ></script>
+  </body>
+</html>

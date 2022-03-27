@@ -6,7 +6,7 @@ MVC는 Model, View, Controller로 나뉘어, 소프트웨어 구조를 좀더 �
 
 ## Model
 
-모델은 내부 비즈니스 로직을 처리가히 위한 역할을 한다. 
+모델은 내부 비즈니스 로직을 처리가히 위한 역할을 한다.
 
 ## View
 
@@ -19,16 +19,15 @@ MVC는 Model, View, Controller로 나뉘어, 소프트웨어 구조를 좀더 �
 
 ### Service
 
-사실 현재 작성해 놓은 `Model`의 로직은 `Service`폴더내의 비즈니스 로직과 같다. 
+사실 현재 작성해 놓은 `Model`의 로직은 `Service`폴더내의 비즈니스 로직과 같다.
 
 요청한 데이터를 가공하는 부분을 담당하는 곳이 `Service`이며 `Model`은 DB의 모델을 구조화한 스키마라고 볼 수 있다.
-
 
 ### MiddleWares
 
 `Express`공식 문서에선 요청(Request)과 응답(Response) 사이에서 특정 과정을 처리하는 함수라고 설명하는데 예를 들어 사용자가 로그인 이후 특정 서비스에 접근하려고 할때 인증된 사용자인지 확인이 필요하다.
 
-이러한 절차를 가진 기능을 미들웨어라 하는데, 요청과 응답사이에서 각각의 기능들을 `MiddleWare`에 모아둔다. 
+이러한 절차를 가진 기능을 미들웨어라 하는데, 요청과 응답사이에서 각각의 기능들을 `MiddleWare`에 모아둔다.
 
 ### Utils
 
@@ -42,3 +41,15 @@ MVC는 Model, View, Controller로 나뉘어, 소프트웨어 구조를 좀더 �
 
 `JavaScript`,`HTML`,`nodeJS`,`ejs`,`express`,`http`,`https`,`passport`,`jsonwebtoken`,`mysql`,`mysql2`,`nodemon`,`qs`,`method-override`
 
+### 기록 위치
+
+- config
+- env
+- middleware
+- models
+- routes
+- services
+- utils
+- view
+- socket
+- mysql

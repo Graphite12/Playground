@@ -119,8 +119,34 @@ ws.on('connection', (socket) => {
   // });
 
   /* 방법A. Room */
+  let users = {};
+  let active_rooms = [];
   const { createUsers, getCurrentUser } = LiveUsers;
   const { createRoom, existRoom } = liveRoom;
+
+  socket.on('create_user', (data) => {
+    let username = data.username;
+
+    //클라이언트에서 넘어온 사용자명이 존재한다면
+    if (username) {
+      //socket 동적 Property 생성(username)후 사용자 저장
+      socket.username = username;
+
+      //유저 생성
+      let user = createUsers(socket.id, socket.username);
+      console.log(user);
+
+      users.uid = user;
+
+      console.log(users);
+      console.log('유저데이터' + JSON.stringify(data));
+    }
+
+    ws.emit('update_chat_user', users);
+    socket.emit('update_chat_rooms', { rooms: active_rooms });
+  });
+
+  /* 방 생성 */
   socket.on('create_room', (data) => {
     console.log(JSON.stringify(data));
 
@@ -136,6 +162,7 @@ ws.on('connection', (socket) => {
       socket.join(socket.room);
     }
   });
+
   /* 사용자 룸에 연결됨 */
   socket.on('join_room', (room) => {
     socket.join(room);
@@ -150,6 +177,9 @@ ws.on('connection', (socket) => {
   /* 사용자 채팅 입력중 */
 
   /* 사용자 연결 종료 */
+  socket.on('disconnected', (data) => {
+    let user = users.user.id;
+  });
 });
 
 /* 방법B. Namespace */

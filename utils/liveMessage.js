@@ -8,4 +8,9 @@ const formatMsgTime = (username, text) => {
   };
 };
 
+const liveMessage = {};
+
+class LiveMessage {
+  constructor() {}
+}
 export default formatMsgTime;

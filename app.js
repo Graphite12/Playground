@@ -11,8 +11,8 @@ import { Server } from 'socket.io';
 
 /* 유틸 */
 import formatMsgTime from './utils/liveMessage.js';
-import { LiveUser, LiveUsers } from './utils/liveUser.js';
-import { liveRoom } from './utils/liveRoom.js';
+import { LiveUsers, listUser, current_user } from './utils/liveUser.js';
+import { liveRoom, listRoom, active_users } from './utils/liveRoom.js';
 
 let port = process.env.SPORT || 8080;
 
@@ -118,11 +118,11 @@ ws.on('connection', (socket) => {
   //   console.log('사용자 연결 종료');
   // });
 
-  /* 방법A. Room */
-  let users = {};
-  let active_rooms = [];
+  /* 방법 A */
+  // let active_rooms = [];
   const { createUsers, getCurrentUser } = LiveUsers;
-  const { createRoom, existRoom } = liveRoom;
+  const { createRoom, existRoom, addUser } = liveRoom;
+  // let activeUser = {};
 
   socket.on('create_user', (data) => {
     let username = data.username;
@@ -133,34 +133,40 @@ ws.on('connection', (socket) => {
       socket.username = username;
 
       //유저 생성
-      let user = createUsers(socket.id, socket.username);
-      console.log(user);
+      const user = createUsers(socket.id, socket.username);
 
-      users.uid = user;
-
-      console.log(users);
+      current_user[socket.id] = user;
+      console.log('서버에 추가된  사용자 객체' + JSON.stringify(current_user));
       console.log('유저데이터' + JSON.stringify(data));
+
+      ws.emit('update_chat_user', current_user);
     }
 
-    ws.emit('update_chat_user', users);
-    socket.emit('update_chat_rooms', { rooms: active_rooms });
+    socket.emit('update_chat_rooms', { room: listRoom });
   });
 
   /* 방 생성 */
   socket.on('create_room', (data) => {
-    console.log(JSON.stringify(data));
+    console.log('클라이언트에서 넘어온 데이터' + JSON.stringify(data));
 
     let subject = data.subject;
 
     if (subject) {
-      let owner = users[socket.id];
-      let id = chatRoom.length;
+      let owner = current_user[socket.id].username;
+      let roomid = listRoom.length;
 
-      let room = createRoom(subject, id, owner);
+      let room = createRoom(subject, roomid, owner);
 
       socket.room = room.subject;
       socket.join(socket.room);
+      addUser(owner);
+
+      console.log('서버 룸' + socket.room);
+      console.log('서버에 생성된 방' + JSON.stringify(listRoom));
+      console.log('사용자' + JSON.stringify(owner));
+      // 모든 유저에게 채팅방 생성 알림 이벤트
     }
+    ws.emit('update_chat_room', { room: listRoom, roomUserList: active_users });
   });
 
   /* 사용자 룸에 연결됨 */

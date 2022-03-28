@@ -23,21 +23,29 @@ const liveRoom = {
   },
 
   addUser: (user) => {
+    for (let i = 0; i < active_users.length; i++) {
+      if (active_users[i].id === user.id) {
+        return;
+      }
+    }
     active_users.push(user);
+    console.log(active_users);
   },
 
   exitUser: (user) => {},
   kickUser: (user) => {},
   banUser: (user) => {},
 
-  createRoom: (subject, id, owner) => {
-    let room = { subject, id, owner };
-    roomLists.push(room);
+  createRoom: (subject, roomid, owner) => {
+    let room = { subject, roomid, owner };
+    listRoom.push(room);
     return room;
   },
 
   deleteRoom: () => {},
 };
+
+/* 클래스 */
 
 class LiveRoom {
   constructor(subject, id, owner) {
@@ -56,4 +64,4 @@ class LiveRoom {
   banUsers() {}
 }
 
-export { liveRoom, LiveRoom, listRoom };
+export { liveRoom, LiveRoom, listRoom, active_users };

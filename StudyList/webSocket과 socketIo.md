@@ -138,3 +138,7 @@ io.to('room').emit('message', '메세지');
 ```
 
 - `socket.leave()`
+
+- 서버
+
+- 클라이언트

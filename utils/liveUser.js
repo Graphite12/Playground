@@ -1,13 +1,14 @@
-const lusers = [];
+const listUser = [];
+const current_user = {};
 
 function existClientIdAndUssername(id, username) {
   let isExists = false;
   let oldUser;
   let oldUserName;
 
-  lusers.findIndex((uid) => {
+  listUser.findIndex((uid) => {
     if (uid === undefined) {
-      lusers.push(id, username);
+      listUser.push(id, username);
     }
 
     if (uid.id === id) {
@@ -46,28 +47,14 @@ const LiveUsers = {
     // console.log('중복여부체크:' + isExists);
 
     const user = { id, username };
-    lusers.push(user);
-    console.log('서버사용자:' + JSON.stringify(lusers));
+    listUser.push(user);
+
+    console.log('서버에 추가된 사용자 리스트 :' + JSON.stringify(listUser));
     return user;
   },
   getCurrentUser: (id) => {
-    return lusers.find((uid) => uid.id === id);
+    return listUser.find((uid) => uid.id === id);
   },
-
-  //사용자 퇴장
-  //   leaveUser: (id) => {
-  //     const idx = lusers.findIndex((uid) => uid.id === id);
-
-  //     if (idx !== -1) {
-  //       //접속된 사용자 index를 하나만 제거한다.
-  //       return lusers.splice(idx, 1)[0];
-  //     }
-  //   },
-
-  //   //사용자가 입장한 방 확인
-  //   getUserInRoom: (room) => {
-  //     return lusers.filter((uid) => uid.room === room);
-  //   },
 };
 
 // 클래스형
@@ -119,4 +106,4 @@ class LiveUserList {
   }
 }
 
-export { LiveUser, LiveUserList, LiveUsers, lusers };
+export { LiveUser, LiveUserList, LiveUsers, listUser, current_user };

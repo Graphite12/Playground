@@ -5,13 +5,7 @@
 </head>
 <body>
   <h1><%= title %></h1>
-  <aside id="user-area">
-    <div class="user-count">몇명입니다.</div>
-    <div>
-      <h3>참여한 사용자</h3>
-      <ul class="user-list"></ul>
-    </div>
-  </aside>
+  <aside id="user-area"><%- include('./liveChatUserList') %></aside>
   <section id="msg-area">
     <div>
       <ul class="text-box"></ul>
@@ -32,7 +26,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <!-- socket.io 를 활용한 코드 -->
   <script
-    src="/static/public/liveinvaderScript/liveChat.js"
+    src="/static/public/liveinvader/js/liveInvader.js"
     type="module"
   ></script>
 </body>

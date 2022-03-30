@@ -10,9 +10,9 @@ import { Server } from 'socket.io';
 //import liveinvaderController from './routes/chat/liveinvaderController.js';
 
 /* 유틸 */
-import formatMsgTime from './utils/liveMessage.js';
-import { LiveUser, LiveUsers } from './utils/liveUser.js';
-import { liveRoom } from './utils/liveRoom.js';
+import liveChatData from './utils/livechatData/liveChatData.js';
+import { createUsers, getClientUser } from './utils/livechatData/liveUser.js';
+import { createRoom } from './utils/livechatData/liveRoom.js';
 
 let port = process.env.SPORT || 8080;
 
@@ -118,58 +118,66 @@ ws.on('connection', (socket) => {
   //   console.log('사용자 연결 종료');
   // });
 
-  /* 방법A. Room */
-  let users = {};
-  let active_rooms = [];
-  const { createUsers, getCurrentUser } = LiveUsers;
-  const { createRoom, existRoom } = liveRoom;
+  /* 방법 A */
+  // let active_rooms = [];
 
+  // let activeUser = {};
+
+  /* 사용자 추가 */
   socket.on('create_user', (data) => {
+    console.log('서버로 넘어온 데이터(사용자 가입)');
+    console.log(JSON.stringify(data));
+    console.log(liveChatData.users);
+    console.log('서버로 넘어온 데이터(사용자 가입)');
+
     let username = data.username;
 
-    //클라이언트에서 넘어온 사용자명이 존재한다면
-    if (username) {
-      //socket 동적 Property 생성(username)후 사용자 저장
-      socket.username = username;
-
-      //유저 생성
-      let user = createUsers(socket.id, socket.username);
-      console.log(user);
-
-      users.uid = user;
-
-      console.log(users);
-      console.log('유저데이터' + JSON.stringify(data));
+    if (!username) {
+      return {
+        status: false,
+        message: '사용자명을 입력하셈',
+      };
     }
 
-    ws.emit('update_chat_user', users);
-    socket.emit('update_chat_rooms', { rooms: active_rooms });
+    let user = createUsers(socket.id, username);
+
+    if (user.userdata.user) {
+      //대기실에 모든 사용자에게 사용자 추가 됨을 시각적으로 알림
+      ws.emit('update_main_userlist', { userdata: user.userdata.user });
+    }
   });
 
   /* 방 생성 */
   socket.on('create_room', (data) => {
+    console.log('서버로 넘어온 데이터(방 생성)');
     console.log(JSON.stringify(data));
+    console.log(JSON.stringify(data.roomname));
+    console.log(liveChatData.users);
+    console.log('서버로 넘어온 데이터(방생성)');
 
-    let subject = data.subject;
+    let owner = getClientUser(socket.id);
+    let roomid = liveChatData.roomList.length;
+    let roomname = data.roomname;
+    //모든 사용자들에게 방이 생성됨을 알림
 
-    if (subject) {
-      let owner = users[socket.id];
-      let id = chatRoom.length;
+    console.log('오우너' + JSON.stringify(owner));
+    console.log('방id' + roomid);
 
-      let room = createRoom(subject, id, owner);
-
-      socket.room = room.subject;
-      socket.join(socket.room);
+    if (roomname) {
+      if (owner === undefined) {
+        return;
+      }
+      let room = createRoom(roomid, roomname, owner);
+      console.log(JSON.stringify(room));
+      ws.emit('update_main_chatroom', { roomlist: room });
     }
   });
 
   /* 사용자 룸에 연결됨 */
-  socket.on('join_room', (room) => {
-    socket.join(room);
-  });
+  socket.on('join_room', (data) => {});
 
   /* 사용자 정보 받아 저장 */
-  socket.on('add_user', () => {});
+  socket.on('update_user', () => {});
 
   /* 사용자 메세지 수신 */
   socket.on('send_message', () => {});
@@ -177,9 +185,7 @@ ws.on('connection', (socket) => {
   /* 사용자 채팅 입력중 */
 
   /* 사용자 연결 종료 */
-  socket.on('disconnected', (data) => {
-    let user = users.user.id;
-  });
+  socket.on('disconnected', (data) => {});
 });
 
 /* 방법B. Namespace */

@@ -6,14 +6,7 @@
       <h1>라이브 인베이더</h1>
     </header>
     <aside>
-      <div>
-        <h1>접속자</h1>
-        <ul class="all-user-list"></ul>
-      </div>
-      <div>
-        <h1>채팅방 목록</h1>
-        <ul class="room-list"></ul>
-      </div>
+      <%- include('./liveChatLoginUser') %> <%- include('./liveChatRoomList') %>
     </aside>
     <div><%- include('./liveRegisterForm') %></div>
     <div><%- include('./liveCreateRoomForm') %></div>
@@ -29,13 +22,12 @@
         required
       />
     </article> -->
-      <button type="submit">채팅입장</button>
     </form>
     <!-- socket.io 를 Global영역으로 가져와 사용 -->
     <script src="/socket.io/socket.io.js"></script>
     <!-- socket.io 를 활용한 코드 -->
     <script
-      src="/static/public/liveinvader/js/liveInvader.js"
+      src="/static/public/liveinvader/js/AllFaction.js"
       type="module"
     ></script>
   </body>

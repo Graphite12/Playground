@@ -10,7 +10,7 @@ const create_room_btn = document.querySelector('.create_chat_room');
 const register_user_form = document.querySelector('.register-form');
 const register_username_input = document.querySelector('.username-input');
 const room_subject_input = document.querySelector('.chat_room_subject_input');
-
+const join_user_list = document.querySelector('.joined-user-list');
 /* 클라이언트 연결 */
 let socket = io(); //socket.io 서버에 연결
 let current_room;
@@ -43,6 +43,15 @@ socket.on('update_chat_user', (data) => {
 });
 
 /* 사용자 접속 */
+socket.on('join_room', (data) => {
+  console.log('사용자 채팅 참여 기능(Client)');
+  console.log(data);
+  console.log('사용자 채팅 참여 기능(Client)');
+
+  current_room = data.room.roomid;
+
+  joinRoom(current_room);
+});
 
 /* 사용자 메세지 입력 */
 socket.emit('chatting', (msg) => {});
@@ -76,6 +85,7 @@ function createChatRoom() {
   socket.emit('create_room', { subject: sbj });
 }
 
+/* 채팅앱 방 리스트 렌더링 */
 function updateChatRoomList(data) {
   let userlist = data.roomUserList;
   let chatroom = data.room;
@@ -87,10 +97,12 @@ function updateChatRoomList(data) {
   for (let i = 0; i < chatroom.length; i++) {
     let owner = data.room[i].owner;
     let room = chatroom[i];
-    console.log(room);
+    console.log('클라이언트방' + JSON.stringify(room.roomid));
     let cntUser = parseInt(userlist.length);
 
     roomLink.setAttribute('href', '#');
+    roomLink.setAttribute('text', `${room.subject}`);
+    roomLink.setAttribute('class', 'room_link');
     roomLink.textContent = room.subject;
 
     roomUserCnt.textContent = userlist.length;
@@ -102,12 +114,14 @@ function updateChatRoomList(data) {
 
 //채팅 참여
 function joinRoom(room) {
-  socket.emit('join_room', { room_id: room.id }, (data) => {
-    console.log(data);
+  const roomLink = document.querySelector('room_link');
+
+  roomLink.addEventListener('click', () => {
+    socket.emit('join_room', { room_id: room });
   });
 }
 
-/* 채팅앱 리스트 렌더링 */
+/* 채팅앱 사용자 리스트 렌더링 */
 function updateChatAppUserList(data) {
   const userli = document.createElement('li');
   userli.textContent = data[socket.id].username;
@@ -123,4 +137,16 @@ function registerUser(e) {
   console.log(current_username);
 
   socket.emit('create_user', { username: current_username });
+}
+
+/* 채팅 입장 사용자  */
+function updateActiveChatUser(data) {
+  let room = data.room;
+  let owner = data.room.owner;
+  let current_User = data.roomUserList;
+
+  for (let i = 0; i < current_User.length; i++) {
+    let user = current_User[i];
+    let username = user.username;
+  }
 }

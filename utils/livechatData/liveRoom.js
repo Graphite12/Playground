@@ -15,6 +15,21 @@ const createRoom = (id, rname, owner) => {
 };
 const isExistRoom = () => {};
 
+const roomAddUser = (user) => {
+  let userlist = liveChatData.joinUsers;
+  for (let i = 0; userlist.length; i++) {
+    if (userlist[i].userId === user.userId) {
+      return;
+    }
+  }
+
+  liveChatData.joinUsers.push(user.username);
+};
+
+const getUsers = (rname) => {
+  let onlineUsers = liveChatData.joinUsers;
+};
+
 /* 클래스 */
 
 class LiveRoom {
@@ -34,4 +49,4 @@ class LiveRoom {
   banUsers() {}
 }
 
-export { createRoom };
+export { createRoom, roomAddUser };

@@ -32,9 +32,11 @@ create_room_btn.addEventListener('click', () => {
   socket.emit('create_room', { roomname: create_chatroom_input });
 });
 
+socket.on('update_chat_userlist', (data) => {});
+
 socket.on('update_main_chatroom', (data) => {
-  console.log(data);
-  console.log(JSON.stringify(data.roomlist[0].id));
+  // console.log(data);
+  // console.log(JSON.stringify(data.roomlist[0].id));
 
   const roomlist = document.createElement('li');
   const roomLink = document.createElement('a');
@@ -43,8 +45,9 @@ socket.on('update_main_chatroom', (data) => {
   const roomid = data.roomlist[0].id;
 
   roomspan.textContent = roomname;
-  roomLink.setAttribute('href', `/liveinvader/chat/${roomid}`);
-  roomLink.textContent = '참여하기';
+  roomLink.setAttribute('href', `/liveinvader/chat/${roomname}`);
+  roomLink.setAttribute('class', 'join-room-link');
+  roomLink.textContent = '참여';
 
   roomlist.append(roomLink);
   active_room_list.append(roomspan, roomlist);
@@ -58,9 +61,9 @@ const joined_mainpage_user_list = document.querySelector(
 );
 
 socket.on('update_main_userlist', (data) => {
-  console.log(data);
+  console.log('과연' + JSON.stringify(data));
 
-  const username = data.userdata.userName;
+  const username = data.userData.userName;
 
   if (username) {
     let userlist = document.createElement('li');
@@ -73,4 +76,9 @@ socket.on('update_main_userlist', (data) => {
 
 /* 사용자 연결 종료 */
 
+/* 자동 메시지 */
+function appendMessage(msg) {
+  const msgEl = document.createElement('div');
+  msgEl.textContent = msg;
+}
 /* 모달 */

@@ -12,7 +12,7 @@ import { Server } from 'socket.io';
 /* 유틸 */
 import liveChatData from './utils/livechatData/liveChatData.js';
 import { createUsers, getClientUser } from './utils/livechatData/liveUser.js';
-import { createRoom } from './utils/livechatData/liveRoom.js';
+import { createRoom, roomAddUser } from './utils/livechatData/liveRoom.js';
 
 let port = process.env.SPORT || 8080;
 
@@ -123,12 +123,15 @@ ws.on('connection', (socket) => {
 
   // let activeUser = {};
 
+  /* 사용자 연결 */
+  socket.on('connect', () => {});
+
   /* 사용자 추가 */
   socket.on('create_user', (data) => {
-    console.log('서버로 넘어온 데이터(사용자 가입)');
-    console.log(JSON.stringify(data));
-    console.log(liveChatData.users);
-    console.log('서버로 넘어온 데이터(사용자 가입)');
+    // console.log('서버로 넘어온 데이터(사용자 가입)');
+    // console.log(JSON.stringify(data));
+    // console.log(liveChatData.users);
+    // console.log('서버로 넘어온 데이터(사용자 가입)');
 
     let username = data.username;
 
@@ -139,53 +142,80 @@ ws.on('connection', (socket) => {
       };
     }
 
-    let user = createUsers(socket.id, username);
+    let { userdata } = createUsers(socket.id, username);
 
-    if (user.userdata.user) {
+    if (userdata) {
       //대기실에 모든 사용자에게 사용자 추가 됨을 시각적으로 알림
-      ws.emit('update_main_userlist', { userdata: user.userdata.user });
+      ws.emit('update_main_userlist', { userData: userdata.user });
     }
   });
 
   /* 방 생성 */
   socket.on('create_room', (data) => {
-    console.log('서버로 넘어온 데이터(방 생성)');
-    console.log(JSON.stringify(data));
-    console.log(JSON.stringify(data.roomname));
-    console.log(liveChatData.users);
-    console.log('서버로 넘어온 데이터(방생성)');
+    // console.log('서버로 넘어온 데이터(방 생성)');
+    // console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data.roomname));
+    // console.log(liveChatData.users);
+    // console.log('서버로 넘어온 데이터(방생성)');
 
     let owner = getClientUser(socket.id);
     let roomid = liveChatData.roomList.length;
     let roomname = data.roomname;
     //모든 사용자들에게 방이 생성됨을 알림
 
-    console.log('오우너' + JSON.stringify(owner));
-    console.log('방id' + roomid);
+    // console.log('오우너' + JSON.stringify(owner));
+    // console.log('방id' + roomid);
 
     if (roomname) {
       if (owner === undefined) {
         return;
       }
-      let room = createRoom(roomid, roomname, owner);
-      console.log(JSON.stringify(room));
+
+      let room = createRoom(roomid, roomname, owner.username);
+
+      // console.log('서버에서 생성된 방 ');
+      // console.log(JSON.stringify(room));
+      // console.log('서버에서 생성된 방 ');
+
+      socket.room = room.roomname;
+      socket.join(socket.room);
+      roomAddUser(owner);
+
+      console.log(liveChatData.joinUsers);
+
       ws.emit('update_main_chatroom', { roomlist: room });
+
+      //채팅방 이용자들에게만 보여짐
+      ws.to(socket.room).emit('user_join_inside_room', {
+        username: owner.username,
+      });
     }
   });
 
-  /* 사용자 룸에 연결됨 */
-  socket.on('join_room', (data) => {});
+  /* 사용자 방 참여 */
+  socket.on('user_join_room', (data) => {
+    console.log('서버로 넘어온 데이터(방 참여)');
+    console.log(JSON.stringify(data));
+    console.log('서버로 넘어온 데이터(방 참여)');
 
-  /* 사용자 정보 받아 저장 */
-  socket.on('update_user', () => {});
+    ws.to(socket.room).emit('user_join_inside_room', {});
+  });
 
   /* 사용자 메세지 수신 */
-  socket.on('send_message', () => {});
+  socket.on('send_message', (data) => {
+    ws.to(data.roomname).emit('send_message', {
+      username: data.username,
+      msg: data.message,
+    });
+  });
 
   /* 사용자 채팅 입력중 */
+  socket.on('isTyping', (data) => {
+    socket.broadcast.to(data.roomname).emit('isTyping', data.username);
+  });
 
   /* 사용자 연결 종료 */
-  socket.on('disconnected', (data) => {});
+  socket.on('disconnect', (data) => {});
 });
 
 /* 방법B. Namespace */

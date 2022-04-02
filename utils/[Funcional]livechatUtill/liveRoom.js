@@ -1,13 +1,5 @@
 import liveChatData from './liveChatData.js';
 const createRoom = (id, rname, owner) => {
-  for (let i = 0; liveChatData.roomList.length; i++) {
-    if (id) {
-    }
-
-    if (rname) {
-    }
-  }
-
   let room = { id, rname, owner };
   liveChatData.roomList.push(room);
 
@@ -15,20 +7,30 @@ const createRoom = (id, rname, owner) => {
 };
 const isExistRoom = () => {};
 
-const roomAddUser = (user) => {
+const isCurrentRoom = (owner) => {};
+
+const roomJoinUser = (user, room) => {
   let userlist = liveChatData.joinUsers;
+  let currentRoom = liveChatData.currentRoom;
   for (let i = 0; userlist.length; i++) {
     if (userlist[i].userId === user.userId) {
       return;
     }
   }
 
-  liveChatData.joinUsers.push(user.username);
+  let chatuser = { user };
+
+  userlist.push(chatuser);
+  currentRoom[room.id] = room;
+  return chatuser;
 };
 
-const getUsers = (rname) => {
+const getCurrentUsers = (rname) => {
   let onlineUsers = liveChatData.joinUsers;
 };
+const updateUserList = (prev, next, id) => {};
+const loginCheck = () => {};
+const getUserByRoomId = () => {};
 
 /* 클래스 */
 
@@ -49,4 +51,4 @@ class LiveRoom {
   banUsers() {}
 }
 
-export { createRoom, roomAddUser };
+export { createRoom, roomJoinUser };

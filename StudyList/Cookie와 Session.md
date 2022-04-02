@@ -4,7 +4,7 @@
 
 ### Cookie
 
-### Session
+### Sessionx
 
 ## 사용법
 

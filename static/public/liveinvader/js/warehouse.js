@@ -1,3 +1,5 @@
+/* Dom Tag , */
+
 /* 사용자 추가 */
 //클라이언트에서 인풋에 입력후 버튼 누름
 //서버로 날라감
@@ -19,6 +21,15 @@ register_user_form.addEventListener('submit', (e) => {
   }
 });
 
+socket.on('insert_user_data', (data) => {
+  console.log('서버로 부터 받은 유저데이터');
+  console.log(data.userdata.uid);
+  console.log('서버로부터 받은 유저데이터');
+
+  const userid = data.userdata.uid;
+  localStorage.setItem('uid', userid);
+});
+
 /* 방 생성 */
 const create_room_btn = document.querySelector('.create_chat_room');
 const create_room_form = document.querySelector('.create_room');
@@ -32,8 +43,6 @@ create_room_btn.addEventListener('click', () => {
   socket.emit('create_room', { roomname: create_chatroom_input });
 });
 
-socket.on('update_chat_userlist', (data) => {});
-
 socket.on('update_main_chatroom', (data) => {
   // console.log(data);
   // console.log(JSON.stringify(data.roomlist[0].id));
@@ -43,33 +52,49 @@ socket.on('update_main_chatroom', (data) => {
   const roomspan = document.createElement('span');
   const roomname = data.roomlist[0].rname;
   const roomid = data.roomlist[0].id;
-
+  console.log(data);
   roomspan.textContent = roomname;
   roomLink.setAttribute('href', `/liveinvader/chat/${roomname}`);
-  roomLink.setAttribute('class', 'join-room-link');
+  roomLink.setAttribute('text', `${roomname}`);
+  roomLink.classList.add('join_chat_room');
   roomLink.textContent = '참여';
 
   roomlist.append(roomLink);
   active_room_list.append(roomspan, roomlist);
-});
 
-/* 방 참가 */
+  if (roomLink) {
+    console.log(window.location.search);
+    console.log(roomLink);
+    roomLink.addEventListener('click', () => {
+      socket.on('user_join_room', { room: roomname });
+    });
+  }
+});
 
 /* 사용자 리스트 추가 */
 const joined_mainpage_user_list = document.querySelector(
   '.joined-mainpage-user-list',
 );
+const user_join_inside_room = document.querySelector('.joined-user-list');
 
 socket.on('update_main_userlist', (data) => {
   console.log('과연' + JSON.stringify(data));
 
-  const username = data.userData.userName;
+  const username = data.userdata.uname;
 
   if (username) {
     let userlist = document.createElement('li');
     userlist.textContent = username;
     joined_mainpage_user_list.append(userlist);
   }
+});
+
+socket.on('user_join_inside_room', (data) => {
+  console.log(data);
+
+  const userli = document.createElement('li');
+  const username = data.username;
+  console.log(username);
 });
 
 /* 메세지 수신 */
@@ -81,4 +106,6 @@ function appendMessage(msg) {
   const msgEl = document.createElement('div');
   msgEl.textContent = msg;
 }
+
+/* 사용자 타이핑 */
 /* 모달 */

@@ -14,6 +14,8 @@
 - 관계형데이터베이스와 NoSQL, 인메모리 저장소(캐시서버) 
   - Mysql, MongoDB, Redis
   - 트랜잭션과 프로져(Stored Procedure 에 대한 이해)
+  - 인덱싱 구현
+  - DB조회시 보다 빠른 최적화 쿼리문 작성
 - WebSocket, SocketIO로 RTC(Real-Time Communication) 양방향 통신 
 
 # MVC 디자인 패턴으로 설계

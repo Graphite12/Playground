@@ -1,5 +1,5 @@
-import db_config from '../config/mysql.js';
-import { pool, getConnection } from '../config/mysql_pool.js';
+import db_config from '../config/mysql/mysql.js';
+import { pool, getConnection } from '../config/mysql/mysql_pool.js';
 import moment from 'moment';
 
 const today = moment().format('YYYY-MM-DD||hh:mm:ss');

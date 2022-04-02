@@ -3,16 +3,22 @@ import { createServer } from 'http';
 import https from 'https';
 import path from 'path';
 import mainRouter from './routes/main/mainRoute.js';
-import liveRouter from './routes/chat/liveRoute.js';
+import liveRouter from './routes/chat/liveChatRoute.js';
 import boardRouter from './routes/board/boardRoute.js';
 import methodOverride from 'method-override';
 import { Server } from 'socket.io';
 //import liveinvaderController from './routes/chat/liveinvaderController.js';
 
 /* 유틸 */
-import liveChatData from './utils/livechatData/liveChatData.js';
-import { createUsers, getClientUser } from './utils/livechatData/liveUser.js';
-import { createRoom } from './utils/livechatData/liveRoom.js';
+import liveChatData from './utils/[Funcional]livechatUtill/liveChatData.js';
+import {
+  createUsers,
+  getClientUser,
+} from './utils/[Funcional]livechatUtill/liveUser.js';
+import {
+  createRoom,
+  roomJoinUser,
+} from './utils/[Funcional]livechatUtill/liveRoom.js';
 
 let port = process.env.SPORT || 8080;
 
@@ -73,10 +79,6 @@ httpServer.listen(port, () => {
   console.log(`연결 성공! *:${port}`);
 });
 
-// let e = ws.on('connection', function (soc) {
-//   console.log('ws 연결성공' + soc);
-// });
-// console.log(e);
 // Server생성자 함수를 활용해 http를 socketio서버로 실행
 
 /* https 실행 */
@@ -123,13 +125,11 @@ ws.on('connection', (socket) => {
 
   // let activeUser = {};
 
+  /* 사용자 연결 */
+  socket.on('connect', () => {});
+
   /* 사용자 추가 */
   socket.on('create_user', (data) => {
-    console.log('서버로 넘어온 데이터(사용자 가입)');
-    console.log(JSON.stringify(data));
-    console.log(liveChatData.users);
-    console.log('서버로 넘어온 데이터(사용자 가입)');
-
     let username = data.username;
 
     if (!username) {
@@ -139,53 +139,65 @@ ws.on('connection', (socket) => {
       };
     }
 
-    let user = createUsers(socket.id, username);
-
-    if (user.userdata.user) {
+    let { userdata } = createUsers(socket.id, username);
+    console.log(userdata[socket.id]);
+    if (userdata) {
       //대기실에 모든 사용자에게 사용자 추가 됨을 시각적으로 알림
-      ws.emit('update_main_userlist', { userdata: user.userdata.user });
+      ws.emit('update_main_userlist', { userdata: userdata[socket.id] });
+
+      //해당 클라이언트(사용자 브라우저)에게 전달이벤트
+      socket.emit('insert_user_data', { userdata: userdata[socket.id] });
     }
   });
 
   /* 방 생성 */
   socket.on('create_room', (data) => {
-    console.log('서버로 넘어온 데이터(방 생성)');
-    console.log(JSON.stringify(data));
-    console.log(JSON.stringify(data.roomname));
-    console.log(liveChatData.users);
-    console.log('서버로 넘어온 데이터(방생성)');
-
     let owner = getClientUser(socket.id);
     let roomid = liveChatData.roomList.length;
     let roomname = data.roomname;
     //모든 사용자들에게 방이 생성됨을 알림
 
-    console.log('오우너' + JSON.stringify(owner));
-    console.log('방id' + roomid);
-
     if (roomname) {
       if (owner === undefined) {
         return;
       }
-      let room = createRoom(roomid, roomname, owner);
-      console.log(JSON.stringify(room));
+
+      let room = createRoom(roomid, roomname, owner.username);
+
+      socket.room = room[0].rname;
+
+      roomJoinUser(owner, socket.room);
+
       ws.emit('update_main_chatroom', { roomlist: room });
+
+      //채팅방 이용자들에게만 보여짐
+      ws.to(socket.room).emit('user_join_inside_room', {
+        username: owner,
+      });
     }
   });
 
-  /* 사용자 룸에 연결됨 */
-  socket.on('join_room', (data) => {});
-
-  /* 사용자 정보 받아 저장 */
-  socket.on('update_user', () => {});
+  /* 사용자 방 참여 */
+  socket.on('user_join_room', (data) => {
+    socket.join(data.room);
+    ws.to(socket.room).emit('user_join_inside_room', { roomname: '방참여' });
+  });
 
   /* 사용자 메세지 수신 */
-  socket.on('send_message', () => {});
+  socket.on('send_message', (data) => {
+    ws.to(data.roomname).emit('send_message', {
+      username: data.username,
+      msg: data.message,
+    });
+  });
 
   /* 사용자 채팅 입력중 */
+  socket.on('isTyping', (data) => {
+    socket.broadcast.to(data.roomname).emit('isTyping', data.username);
+  });
 
   /* 사용자 연결 종료 */
-  socket.on('disconnected', (data) => {});
+  socket.on('disconnect', (data) => {});
 });
 
 /* 방법B. Namespace */

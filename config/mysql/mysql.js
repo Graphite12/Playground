@@ -3,7 +3,7 @@ import mysql from 'mysql2';
 // import dotenv from 'dotenv';
 // const __dirname = path.resolve();
 // dotenv.config({ path: path.join(__dirname, '.env/.env.development') });
-import { mysql_config } from './dotenv_config.js';
+import { mysql_config } from '../dotenv/dotenv_config.js';
 
 const db_config = {
   init: () => {

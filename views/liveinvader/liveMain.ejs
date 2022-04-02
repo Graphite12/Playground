@@ -10,24 +10,11 @@
     </aside>
     <div><%- include('./liveRegisterForm') %></div>
     <div><%- include('./liveCreateRoomForm') %></div>
-    <form action="/liveinvader/chat" method="post">
-      <!-- <article>
-      <label for="username">사용자 이름</label>
-      <input
-        type="text"
-        name="username-input"
-        id="username-input"
-        class="username-input"
-        placeholder="사용자 이름을 입력하세요."
-        required
-      />
-    </article> -->
-    </form>
     <!-- socket.io 를 Global영역으로 가져와 사용 -->
     <script src="/socket.io/socket.io.js"></script>
     <!-- socket.io 를 활용한 코드 -->
     <script
-      src="/static/public/liveinvader/js/AllFaction.js"
+      src="/static/public/liveinvader/js/warehouse.js"
       type="module"
     ></script>
   </body>

@@ -13,7 +13,7 @@
 - 쿠키와 세션 활용
 - 관계형데이터베이스와 NoSQL, 인메모리 저장소(캐시서버) 
   - Mysql, MongoDB, Redis
-  - 트랜잭션과 프로비져(Stored Procedure 에 대한 이해)
+  - 트랜잭션과 프로져(Stored Procedure 에 대한 이해)
 - WebSocket, SocketIO로 RTC(Real-Time Communication) 양방향 통신 
 
 # MVC 디자인 패턴으로 설계

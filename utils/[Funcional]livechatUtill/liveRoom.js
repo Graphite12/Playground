@@ -1,4 +1,3 @@
-import liveChatData from './liveChatData.js';
 const createRoom = (id, rname, owner) => {
   let room = { id, rname, owner };
   liveChatData.roomList.push(room);

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Chat Main</title>
+  </head>
+  <body>
+    <%- include('./header/livechatCategory')%>
+    <section>
+      <aside><%- include('./list/userlist') %></aside>
+      <main><%- include('./list/roomlist') %></main>
+    </section>
+    <button class="addbtn">사용자추가</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/static/public/liveChat/js/liveSourcePack.js"></script>
+  </body>
+</html>

@@ -1,4 +1,3 @@
-import liveChatData from './liveChatData.js';
 import generateUUID from '../uuid.js';
 
 const getClientUser = (uid) => {

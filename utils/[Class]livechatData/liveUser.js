@@ -1,48 +1,43 @@
+import generateUUID from '../uuid.js';
+
 // 클래스형
-class LiveUser {
-  constructor(id, username) {
-    this.id = id;
-    this.username = username;
+export default class LiveUser {
+  constructor() {
+    this.storedUuid;
+    this.users = [];
+  }
+  isExists(uname) {
+    return this.users.forEach((user) => {
+      if (user.spec.useranme === uname) {
+        return true;
+      }
+      return false;
+    });
   }
   getCurrentUserName() {
     return this.username;
   }
   //참여한 사용자 조회
-  getCurrentUserId() {
-    return this.id;
+  getCurrentUserId(uuid) {
+    return this.users.filter((uid) => {
+      return uid.id === uuid;
+    });
   }
-}
+  addUser(uname) {
+    let uuid = generateUUID();
+    let user = { id: uuid, spec: { username: uname } };
 
-class LiveUserList {
-  constructor(users = []) {
-    this.list = users;
+    this.users.push(user);
+
+    return { id: uuid, useranme: uname };
   }
+  removeUser(uid) {
+    let user = this.getCurrentUserId(uid);
 
-  addUser(user) {
-    this.list.push(user);
-  }
-
-  getUserById(id) {
-    this.list.find((uid) => uid.id === id);
-  }
-
-  getUsersByUserName(id, username) {
-    let curr_user = this.getUserById(id);
-
-    if (curr_user) {
-      this.list.filter((name) => {
-        if (name.username !== username) {
-          return {
-            acc_status: true,
-            message: '통과',
-          };
-        }
-      });
+    if (user) {
+      this.users;
     }
 
-    return {
-      acc_status: false,
-      message: '사용자가 존재하지 않거나 중복된 닉네임입니다.',
-    };
+    return user;
   }
 }

@@ -1,17 +1,4 @@
-const liveChatData = {
-  roomList: [],
+export const chatData = {
   users: [],
-  //   arrayStoreUser: [],
-  //   objecStoretUser: {},
-  joinUsers: [],
-  joinedUsers: {},
-  currentRoom: {},
-  currentRoomId: null,
+  rooms: [],
 };
-
-const clientData = {
-  currentUser: {},
-  currentRoom: {},
-};
-
-export default liveChatData;

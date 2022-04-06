@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Live Chat Main</title>
+    <title>Live Chat Room</title>
   </head>
   <body>
+    <%- include('./header/livechatRoom', {title: room}) %>
+    <main>
+      <li class="message_list"></li>
+    </main>
+    <div><%- include('./form/chatform') %></div>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/static/public/liveChat/js/liveSourcePack.js"></script>
+    <script src="/static/public/liveChat/js/liveSourcePack2.js"></script>
   </body>
 </html>

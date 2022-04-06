@@ -1,10 +1,18 @@
 import express from 'express';
-
+// import { Server } from 'socket.io';
+// let ws = new Server(httpServer, { cors: { origin: '*' } });
 const liveRouter = express.Router();
+
 liveRouter.get('/', (req, res) => {
   res.render('liveChat/liveChatMain.ejs', { title: 'RTC 채팅 구현' });
 });
 
+liveRouter.get('/room', (req, res) => {});
+liveRouter.get('/:room', (req, res) => {
+  console.log(req.params);
+  console.log(req.path);
+  res.render('liveChat/liveChatRoom.ejs', { room: req.params.room });
+});
 /* Route */
 
 // liveRouter.get(`/:room`, (req, res) => {

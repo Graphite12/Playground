@@ -1,5 +1,5 @@
 import generateUUID from '../uuid.js';
-
+let user = new Map();
 // 클래스형
 export default class LiveUser {
   constructor() {
@@ -7,20 +7,23 @@ export default class LiveUser {
     this.users = [];
   }
   isExists(uname) {
-    return this.users.forEach((user) => {
-      if (user.spec.useranme === uname) {
-        return true;
-      }
-      return false;
-    });
+    return this.users.find((user) => user.spec.username === uname);
+  }
+  isCurrentUser(uid) {
+    return this.users.find((user) => user.id === uid);
   }
   getCurrentUserName() {
     return this.username;
   }
   //참여한 사용자 조회
   getCurrentUserId(uuid) {
-    return this.users.filter((uid) => {
+    return this.users.find((uid) => {
       return uid.id === uuid;
+    });
+  }
+  getUserList() {
+    return this.users.map((list, idx) => {
+      return list;
     });
   }
   addUser(uname) {
@@ -29,7 +32,7 @@ export default class LiveUser {
 
     this.users.push(user);
 
-    return { id: uuid, useranme: uname };
+    return { id: uuid, uname: uname };
   }
   removeUser(uid) {
     let user = this.getCurrentUserId(uid);

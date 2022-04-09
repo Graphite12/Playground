@@ -169,7 +169,7 @@ socket.on('disconnect', () => {
 
 ### SocketIO NameSpace
 
-sockeio에도 namespace라는 개념이 있는데, 서로 다른 엔드포인트, path를 할당할 떄 사용한다. Default Namespace는 `/` 을 사용한다.
+sockeio에도 namespace라는 개념이 있는데, Socket.io는 같은 `
 
 #### 사용자지정 Namespace
 

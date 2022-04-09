@@ -1,4 +1,4 @@
-<form id="add_user" class="add_user">
+<form id="add_user" class="add_user" action="/livechat/user" method="post">
   <header><h3>사용자 추가</h3></header>
   <div>
     <label for="input_username">사용자 이름 입력</label>
@@ -6,6 +6,7 @@
       type="text"
       id="input_username"
       class="input_username"
+      name="user"
       placeholder="사용자명을 입력하세요"
       required
     />

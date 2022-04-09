@@ -3,6 +3,7 @@ let socket = io();
 
 /* Dom Control */
 const joinRoomBtn = document.querySelector('.join_room_btn');
+
 //사용자 추가
 const addUserForm = document.querySelector('#add_user');
 const addUserInput = document.querySelector('.input_username');
@@ -13,45 +14,49 @@ const mainRoomList = document.querySelector('.room_list_guide');
 const addRoomForm = document.querySelector('#add_room');
 const addRoomInput = document.querySelector('.input_roomname');
 
-let currentUser;
-let currentRoom;
-let room = ['room1'];
 /* 버튼 이벤트 */
 addUserForm.addEventListener('submit', addUser);
 addRoomForm.addEventListener('submit', addRoom);
 
 /* 소켓 이벤트 */
-socket.emit('connected', () => {
-  console.log('사용자 연결');
 
-  currentUser = localStorage.getItem('clientUserData');
+socket.on('update_user_list', ({ user, uid }) => {
+  let uli = document.createElement('li');
+  let span = document.createElement('span');
+
+  currentUser = localStorage.setItem('user_token', uid);
+
+  user.forEach((us, idx) => {
+    span.textContent = us.spec.username;
+    uli.append(span);
+    mainUserList.append(uli);
+  });
 });
 
-socket.on('update_client_user_list', (user) => {
-  console.log(user);
+socket.on('update_room_list', (room) => {
+  let rli = document.createElement('li');
+  let span = document.createElement('div');
+  let maker = document.createElement('div');
+  let a = document.createElement('a');
 
-  localStorage.setItem('clientUserData', user.user.id);
+  mainRoomList.textContent = '';
 
-  let userlist = document.createElement('li');
-  userlist.textContent = user.user.uname;
-  mainUserList.append(userlist);
+  room.forEach((rm, idx) => {
+    console.log(rm);
+    span.textContent = rm.info.rname;
+    maker.textContent = rm.info.owner;
+    a.href = `/livechat/${rm.id}`;
+    a.textContent = 'JOIN US';
+    rli.append(span, maker, a);
+
+    mainRoomList.append(rli);
+  });
 });
 
-socket.on('update_client_room_list', (room) => {
-  console.log(room);
-
-  let roomlist = document.createElement('li');
-  let joinbtn = document.createElement('a');
-  joinbtn.textContent = 'Join Us';
-  joinbtn.href = `/livechat/${room.data}`;
-  joinbtn.classList('join_btn');
-
-  roomlist.textContent = room;
-  mainRoomList.append(roomlist.append(joinbtn));
-});
-
+socket.on('owner_join_chat', (data) => {});
 /* 이벤트 헨들러 */
 
+socket.on('update_joined_user_list', (data) => {});
 //사용자 추가
 function addUser(e) {
   e.preventDefault();
@@ -63,6 +68,7 @@ function addUser(e) {
   }
 
   socket.emit('join_user', { username });
+  ㅁ;
 
   username = '';
 }
@@ -76,17 +82,17 @@ function addRoom(e) {
     alert('사용자 명 입력안함');
     return;
   }
-  currentUser = localStorage.getItem('clientUserData');
+  currentUser = localStorage.getItem('user_token');
 
   socket.emit('create_room', { roomname, currentUser });
 
   roomname = '';
 }
+// function callbackJoin(room) {
+//   return joinRoom(room);
+// }
+function joinRoom(e) {
+  currentUser = localStorage.getItem('user_token');
 
-function joinRoom(room) {
-  const joinBtn = document.querySelector('.join_room');
-
-  if (joinBtn) {
-    socket.emit('join_room', room.data);
-  }
+  socket.emit('join_room', e);
 }

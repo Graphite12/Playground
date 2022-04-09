@@ -4,7 +4,7 @@ import moment from 'moment';
 
 const today = moment().format('YYYY-MM-DD||hh:mm:ss');
 const mysqlConn = db_config.init();
-//연결 확인
+// //연결 확인
 db_config.connect(mysqlConn);
 
 const postsModel = {

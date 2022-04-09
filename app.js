@@ -1,12 +1,13 @@
 import express from 'express';
 import { createServer } from 'http';
+import { Server, Socket } from 'socket.io';
 import https from 'https';
 import path from 'path';
 import mainRouter from './bin/core/routes/main/mainRoute.js';
 import boardRouter from './bin/core/routes/board/boardRoute.js';
 import methodOverride from 'method-override';
 import liveRouter from './bin/core/routes/chat/liveChatRoute.js';
-import { Server, Socket } from 'socket.io';
+
 import liveChatConroller from './bin/core/controller/liveChatController.js';
 
 //import liveinvaderController from './routes/chat/liveinvaderController.js';
@@ -19,8 +20,6 @@ let port = process.env.SPORT || 8080;
  * __dirname을 활용
  */
 const __dirname = path.resolve();
-
-/* req.body 접근시 */
 
 let app = express();
 /*
@@ -57,16 +56,24 @@ app.set('views', path.join(`${__dirname}/bin/core`, 'views/'));
 app.use(mainRouter);
 app.use('/boards', boardRouter);
 app.use('/livechat', liveRouter);
+
 // // app.use('/system');
 
-/* http 실행 */
-let httpServer = createServer(app).listen(port, () => {
+// /* http 실행 */
+const httpServer = createServer(app).listen(port, () => {
   console.log(`연결 성공! *:${port}`);
 });
+const ws = new Server(httpServer);
 
-/* app을 인자로 받거나 모듈로 활용할 경우 사용 */
+ws.on('connection', (socket) => {
+  app.set('socketIO', ws);
+  app.set('socketClients', socket);
+  app.set('socketid', socket.id);
+  console.log('클라이언트 접속', socket.id);
+  liveChatConroller(ws, socket);
+});
+/* app을 인자로 받거나 모듈로 활용할 경   우 사용 */
 export default app;
-
 // Server생성자 함수를 활용해 http를 socketio서버로 실행
 
 /* https 실행 */
@@ -86,14 +93,14 @@ export default app;
  * io.on('connection', {})
  */
 
-let ws = new Server(httpServer, { cors: { origin: '*' } });
+// let ws = new Server(httpServer, { cors: { origin: '*' } });
 
-ws.on('connection', (socket) => {
-  console.log('Socket.io 접속 성공');
-  console.log('클라이언트 Socket.id', socket.id);
+// ws.on('connection', (socket) => {
+//   console.log('Socket.io 접속 성공');
+//   console.log('클라이언트 Socket.id', socket.id);
 
-  liveChatConroller(ws, socket);
-});
+//   liveChatConroller(ws, socket);
+// });
 // ws.on('connection', (socket) => {
 //   console.log('socketio 연결 성공');
 

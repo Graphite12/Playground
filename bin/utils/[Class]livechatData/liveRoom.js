@@ -9,6 +9,10 @@ export default class LiveRoom {
     this.joinUser.push(data);
   }
 
+  activeRoom() {
+    return this.rooms;
+  }
+
   addRoom(id, rname, owner) {
     let room = {
       id: id,

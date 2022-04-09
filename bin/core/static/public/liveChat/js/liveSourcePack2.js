@@ -7,7 +7,8 @@ const chatinput = document.querySelector('.input_chatmsg');
 chatform.addEventListener('submit', sendMessage);
 
 socket.on('update_new_message', () => {});
-socket.on('join_room');
+socket.on('user_connected', (user) => {});
+socket.emit('isTyping');
 
 function sendMessage(e) {
   e.preventDefault();

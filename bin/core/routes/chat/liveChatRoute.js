@@ -1,29 +1,29 @@
 import express from 'express';
-// import { Server } from 'socket.io';
-// let ws = new Server(httpServer, { cors: { origin: '*' } });
-const liveRouter = express.Router();
+import {
+  rooms,
+  users,
+} from '../../../utils/[Class]livechatData/newInstance.js';
 
-liveRouter.get('/', (req, res) => {
-  res.render('liveChat/liveChatMain.ejs', { title: 'RTC 채팅 구현' });
+const chatRouter = express.Router();
+
+console.log('클라이언트방', rooms.rooms);
+console.log('클라이언트유저', users.users);
+
+chatRouter.get('/', (req, res) => {
+  res.render('liveChat/liveChatMain.ejs', {
+    title: 'RTC 채팅 구현',
+    userlist: users.users,
+    roomlist: rooms.rooms,
+  });
 });
 
-liveRouter.get('/room', (req, res) => {});
-liveRouter.get('/:room', (req, res) => {
+chatRouter.get('/:room', (req, res) => {
   console.log(req.params);
   console.log(req.path);
-  res.render('liveChat/liveChatRoom.ejs', { room: req.params.room });
+  res.render('liveChat/liveChatRoom.ejs', {
+    room: req.params.room,
+  });
 });
-/* Route */
-
-// liveRouter.get(`/:room`, (req, res) => {
-//   console.log('리소스(uri패러미터) 요청');
-//   console.log(req.params);
-//   console.log('리소스(uri패러미터) 요청');
-
-//   res.render('liveinvader/liveChatRoom.ejs', {
-//     title: 'RTC 채팅 구현',
-//   });
-// });
 
 /* socketio 시작*/
 
@@ -50,4 +50,4 @@ liveRouter.get('/:room', (req, res) => {
 //   gs.emit('livechat2', { chat: 'someone chat2' });
 // });
 
-export default liveRouter;
+export default chatRouter;

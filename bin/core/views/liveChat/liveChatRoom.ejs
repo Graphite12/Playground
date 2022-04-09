@@ -6,10 +6,12 @@
   <body>
     <%- include('./header/livechatRoom', {title: room}) %>
     <main>
+      <%- include('./list/joineduserlist') %>
       <li class="message_list"></li>
     </main>
     <div><%- include('./form/chatform') %></div>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/static/public/liveChat/js/liveSourcePack2.js"></script>
+    <script src="/static/public/liveChat/js/liveSourcePack.js"></script>
   </body>
 </html>

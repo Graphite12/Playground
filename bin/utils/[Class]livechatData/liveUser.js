@@ -12,12 +12,16 @@ export default class LiveUser {
   isCurrentUser(uid) {
     return this.users.find((user) => user.id === uid);
   }
-  getCurrentUserName() {
-    return this.username;
+  getUserData(sid) {
+    return this.users.find((uid) => {
+      return uid.id === sid;
+    });
   }
   //참여한 사용자 조회
   getCurrentUserId(uuid) {
     return this.users.find((uid) => {
+      console.log('사람', uuid);
+      console.log('저장', uid.id);
       return uid.id === uuid;
     });
   }
@@ -26,13 +30,13 @@ export default class LiveUser {
       return list;
     });
   }
-  addUser(uname) {
-    let uuid = generateUUID();
-    let user = { id: uuid, spec: { username: uname } };
+  addUser(id, uname) {
+    // let uuid = generateUUID();
+    let user = { id: id, spec: { uuid: generateUUID(), username: uname } };
 
     this.users.push(user);
 
-    return { id: uuid, uname: uname };
+    return { id: user.id, uname: user.spec.username };
   }
   removeUser(uid) {
     let user = this.getCurrentUserId(uid);

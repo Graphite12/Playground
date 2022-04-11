@@ -30,7 +30,7 @@
   - bin
   - node_modules
   - StudyList
-  .gitignore
+  <div>.gitignore</div>
   newEden.js
   package-lock.json
   package.json

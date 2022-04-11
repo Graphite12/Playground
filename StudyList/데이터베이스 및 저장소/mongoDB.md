@@ -108,6 +108,14 @@ wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add 
 
 - 콜렉션 생성
 
+- DB 리스트보기
+
+- 현재 사용중인 DB보기
+
+- DB 안 콜렉션들 보기
+
+- 콜렉션 안 도큐먼트 보기
+
 ## CRUD Guide
 
 - C(Insert)

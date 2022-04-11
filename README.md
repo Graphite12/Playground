@@ -23,15 +23,34 @@
 
 `JavaScript`,`HTML`,`nodeJS`,`ejs`,`express`,`http`,`https`,`passport`,`jsonwebtoken`,`mysql`,`mysql2`,`nodemon`,`qs`,`method-override`,`socket.io`
 
-### 기록 위치
+### 디렉토리 구조
 
-- config
-- env
-- middleware
-- models
-- routes
-- services
-- utils
-- view
-- socket
-- mysql
+#### [메인]
+- Board (Root)
+  - bin
+  - node_modules
+  - StudyList
+  .gitignore
+  newEden.js
+  package-lock.json
+  package.json
+  README.md
+
+#### [bin]
+- bin
+  - .env
+  - .env.example
+  - config
+  - core
+    - controller
+    - middlewares
+    - models
+    - routes
+    - services
+    - static
+    - views
+  - utils
+    - [Class]livechatUtil
+    - [Functional]livechatUtil
+    uuid.js
+  

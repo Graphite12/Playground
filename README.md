@@ -30,11 +30,11 @@
   - bin
   - node_modules
   - StudyList
-  <div>.gitignore</div>
-  newEden.js
-  package-lock.json
-  package.json
-  README.md
+  .gitignore<br />
+  newEden.js<br />
+  package-lock.json<br />
+  package.json<br />
+  README.md<br />
 
 #### [bin]
 - bin
@@ -52,5 +52,5 @@
   - utils
     - [Class]livechatUtil
     - [Functional]livechatUtil
-    uuid.js
+    uuid.js<br />
   

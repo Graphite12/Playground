@@ -20,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
     "moment": "^2.29.1",
+    "mongodb": "^4.5.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.15",

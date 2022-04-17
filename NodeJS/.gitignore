@@ -1,0 +1,10 @@
+#Node Moduel
+/node_modules
+
+#Enviroment File
+/.env/.env
+.env
+*.pem
+*.pem
+*.key
+*.crt

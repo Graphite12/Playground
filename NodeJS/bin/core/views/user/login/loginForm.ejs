@@ -2,9 +2,19 @@
   <header>
     <h1>로그인 폼</h1>
   </header>
-  <form>
-    <input name="signin-email" />
-    <input name="signin-password" />
+  <form action="/users/signin" method="post">
+    <div>
+      <label>
+        사용자 이메일:
+        <input name="email" type="text" class="input-login-email" />
+      </label>
+    </div>
+    <div>
+      <label>
+        사용자 비밀번호:
+        <input name="password" type="password" class="input-login-password" />
+      </label>
+    </div>
     <button>로그인</button>
   </form>
 </div>

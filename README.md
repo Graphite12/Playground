@@ -8,7 +8,3 @@ TypeSciprt는 마이크로소프트에서 개발한 언어로 기존 JavaScript�
 
 ## 디렉터리 구조
 
-tree=$(tree -tf --noreport -I '*~' --charset ascii $1 |
-       sed -e 's/| \+/  /g' -e 's/[|`]-\+/ */g' -e 's:\(* \)\(\(.*/\)\([^/]\+\)\):\1[\4](\2):g')
-
-printf "# Project tree\n\n${tree}"

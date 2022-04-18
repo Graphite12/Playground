@@ -1,6 +1,10 @@
 # mysql
 
-# mysql 과 mysql2 차이점
+RDBMS, 관계형 데이터베이스라고 하면은 대부분 Oracle, PostgreSQL, MariaDB 등등 여러가지를 들어봤을 텐데.. 무료 오픈소스이면서 널리 쓰여 입문하기 좋은 국룰 관계형DB가 MySQL이다. 당장 구글링만해도 Mysql 자료가 넘친다.
+
+# Myql 라이브러리
+
+## mysql 과 mysql2 차이점
 
 동일하다. 그러나 Mysql2는 TypeScript 로 작성되어있으며,
 

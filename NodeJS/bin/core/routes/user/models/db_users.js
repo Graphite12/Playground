@@ -7,9 +7,9 @@ const Users = {
     const sql = ``;
   },
   signUpData: async (data, cb) => {
-    const sql1 = `INSERT INTO accounts (uid, username, email, password) VALUES (?, ?, ?, ?)`;
-    const sql2 = `INSERT INTO accounts SET ?`;
-    const sql3 = 'SELECT * FROM accounts WHERE email';
+    const sql1 = `INSERT INTO accounts (uid, username, email, password) VALUES (uuid_to_bin(?), ?, ?, ?)`;
+    const sql2 = `INSERT INTO accounts (uid, username, email, password) VALUES (?, ?, ?, ?)`;
+    const sql3 = 'SELECT * FROM accounts WHERE email = ?';
 
     let msg;
 
@@ -17,28 +17,34 @@ const Users = {
       if (!valid.isEmailValid(data.email)) {
         msg = `${data.email}의 형식이 일치하지 않습니다.`;
         console.log(msg);
+        return;
       }
 
       const [isValid, fields] = await pool.execute(sql3, [data.email]);
-
-      if (isValid.length > 1) {
+      console.log(isValid);
+      if (isValid.length >= 1) {
         msg = `${data.email}은/는 이미 사용중인 이메일 입니다.`;
         console.log(msg);
+        return;
       }
 
       if (data.password !== data.confirmPassword) {
         msg = `패스워드가 일치하지 않습니다.`;
         console.log(msg);
+        return;
       }
+
       const hashPass = await bcrypt.hash(data.password, 12);
 
       const params = [generateUUID(), data.nickname, data.email, hashPass];
-      console.log(params);
-      const [item, fileds] = await pool.execute(sql1, params);
+
+      const [item, fileds] = await pool.execute(sql2, params);
       console.log(item);
-      console.log(fields);
+
       await cb(item);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
   logoutData: async (data, cb) => {
     const sql = ``;

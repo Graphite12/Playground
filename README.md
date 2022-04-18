@@ -8,7 +8,6 @@ TypeSciprt는 마이크로소프트에서 개발한 언어로 기존 JavaScript�
 
 ## 디렉터리 구조
 
-```bash
 * [StudyList](./StudyList)
    * [uuid란 무엇인가?.md](./StudyList/uuid란 무엇인가?.md)
    * [passport.md](./StudyList/passport.md)
@@ -179,4 +178,3 @@ TypeSciprt는 마이크로소프트에서 개발한 언어로 기존 JavaScript�
    * [tsconfig.json](./TypeScript/NestJS/tsconfig.json)
    * [package-lock.json](./TypeScript/NestJS/package-lock.json)
  * [project.sh](./project.sh)
-```

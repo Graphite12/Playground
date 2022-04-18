@@ -7,9 +7,8 @@ TypeSciprt는 마이크로소프트에서 개발한 언어로 기존 JavaScript�
 컴파일 되지만, 그래도 작성할때는 TypeScript만의 속성과 특징이 있기 때문에 따로 분리하여 구분지음
 
 ## 디렉터리 구조
-```
-ROOT
-+--TypeSciprt
-+--JavaScript/NodeJS
-+--StudyList
-```
+
+tree=$(tree -tf --noreport -I '*~' --charset ascii $1 |
+       sed -e 's/| \+/  /g' -e 's/[|`]-\+/ */g' -e 's:\(* \)\(\(.*/\)\([^/]\+\)\):\1[\4](\2):g')
+
+printf "# Project tree\n\n${tree}"

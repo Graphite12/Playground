@@ -8,15 +8,6 @@ TypeSciprt는 마이크로소프트에서 개발한 언어로 기존 JavaScript�
 
 ## 디렉터리 구조
 
-- TypeSciprt
-  |- NestJS
-  |-
-  |-
-  
-- JavaScript
- |- NodeJS
- |-
-
-- StudyList
- |
- |--
+ROOT/TypeSciprt
+    /JavaScript/NodeJS
+    /StudyList

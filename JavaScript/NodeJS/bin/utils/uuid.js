@@ -1,4 +1,12 @@
-import { v4 as uuidV4 } from 'uuid';
+import { v1 as uidv1, v3 as uuidV3, v4 as uuidV4, v5 as uuidv5 } from 'uuid';
+(function uid() {
+  console.log('uuidV1: ', uidv1());
+  let Namespace = uuidV4();
+  console.log('uuidV3: ', uuidV3('New World', Namespace));
+  console.log('uuidV4: ', uuidV4());
+  console.log('uuidV5_CUSTOM: ', uuidv5('Hello World', Namespace));
+  console.log('uuidV5_URL: ', uuidv5('https://www.w3.org/', uuidv5.URL));
+})();
 
 const generateUUID = () => {
   const token = uuidV4().split('-');

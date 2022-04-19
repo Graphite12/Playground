@@ -10,6 +10,37 @@ export default {
   getRegisterForm: async (req, res, next) => {
     res.render('user/register/registerForm.ejs');
   },
+
+  /* 유저 로그인 */
+  signIn: async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+
+      const data = {
+        email,
+        password,
+      };
+
+      userModel.signInData(data, (result) => {
+        console.log(result);
+
+        if (result) {
+          res
+            .cookie('users', result.uid, {
+              path: '/',
+              secure: process.env.NODE_ENV === 'production' ? true : false,
+              httpOnly: true,
+              maxAge: 5 * 10000,
+            })
+            .status(302)
+            .redirect('/');
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   /* 유저 생성 */
   signUp: async (req, res, next) => {
     console.log('회원가입정보', req.body);
@@ -35,21 +66,6 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
-  /* 유저 로그인 */
-  signIn: async (req, res, next) => {
-    try {
-      const { email, password } = req.body;
-
-      const data = {
-        email,
-        password,
-      };
-
-      userModel.signInData(data, (result) => {
-        console.log(result);
-      });
-    } catch (error) {}
   },
   /* 유저 로그아웃 */
   signOut: async (req, res, next) => {

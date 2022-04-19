@@ -1,5 +1,9 @@
 import { Router } from 'express';
+/* 일반 로그인 */
 import userController from './controllers/userController.js';
+
+/* 패스포트 로그인 */
+
 const userRouter = Router();
 
 /* 로그인, 가입 폼 가져오기 */

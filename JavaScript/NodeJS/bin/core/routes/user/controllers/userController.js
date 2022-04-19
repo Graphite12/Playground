@@ -13,27 +13,42 @@ export default {
   /* 유저 생성 */
   signUp: async (req, res, next) => {
     console.log('회원가입정보', req.body);
-
-    let { email, password, confirmPassword, nickname } = req.body;
-
-    let data = {
-      email,
-      password,
-      confirmPassword,
-      nickname,
-    };
-
-    userModel.signUpData(data, (result) => {
-      console.log(result);
-    });
     try {
-    } catch (error) {}
+      let { email, password, confirmPassword, nickname } = req.body;
+
+      let data = {
+        email,
+        password,
+        confirmPassword,
+        nickname,
+      };
+
+      userModel.signUpData(data, (result) => {
+        console.log(result);
+
+        if (result) {
+          res.redirect('/users/signin');
+        } else {
+          res.redirect('/');
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
   /* 유저 로그인 */
   signIn: async (req, res, next) => {
     try {
-      let { email, password } = req.body;
-      userModel.signIn();
+      const { email, password } = req.body;
+
+      const data = {
+        email,
+        password,
+      };
+
+      userModel.signInData(data, (result) => {
+        console.log(result);
+      });
     } catch (error) {}
   },
   /* 유저 로그아웃 */

@@ -1,7 +1,9 @@
 const main = {
   view: (req, res) => {
     // res.send('Hello World');
-    res.render('main', { title: 'HelloWorld' });
+    console.log(req.cookies);
+
+    res.render('main', { title: 'HelloWorld', isLoggedIn: req.isLogged });
   },
 };
 

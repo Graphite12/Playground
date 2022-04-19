@@ -22,8 +22,6 @@ const Users = {
     if (await valid.isPasswordCompare(data.password, info[0].password)) {
       delete info[0].password;
 
-      console.log(info[0]);
-
       cb(info[0]);
     }
     try {

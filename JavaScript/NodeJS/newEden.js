@@ -5,6 +5,7 @@ import https from 'https';
 import path from 'path';
 import methodOverride from 'method-override';
 import socket from './bin/utils/socket.js';
+import cookieParser from 'cookie-parser';
 
 /* 라우터 */
 import userRouter from './bin/core/routes/user/userRouter.js';
@@ -42,6 +43,7 @@ app.use(express.urlencoded({ extended: true }));
  * (methodOverride 미사용시 get, post만 사용 가능)
  */
 app.use(methodOverride('_method'));
+app.use(cookieParser());
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(`${__dirname}/bin/core`, 'views/'));
@@ -57,7 +59,6 @@ app.use(mainRouter);
 app.use('/boards', boardRouter);
 app.use('/livechat', liveRouter);
 app.use('/users', userRouter);
-// // app.use('/system');
 
 // /* http 실행 */
 const httpServer = createServer(app).listen(port, () => {

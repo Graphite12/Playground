@@ -1,5 +1,5 @@
 import express from 'express';
-import boards from '../board/controllers/boardController.js';
+import boards from './controllers/boardController.js';
 
 const boardRouter = express.Router();
 

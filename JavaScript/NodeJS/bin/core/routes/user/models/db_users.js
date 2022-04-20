@@ -19,6 +19,10 @@ const Users = {
     //   await bcrypt.compareSync(data.password, info[0].password),
     // );
 
+    if (!data.password) {
+      cb({ status: 'pwd', msg: '비밀번호를 입력하세요' });
+    }
+
     if (await valid.isPasswordCompare(data.password, info[0].password)) {
       delete info[0].password;
 

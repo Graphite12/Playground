@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb`';
 
 console.log(MongoClient);
 console.log(ServerApiVersion.v1);

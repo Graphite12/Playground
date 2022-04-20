@@ -43,7 +43,11 @@ app.use(express.urlencoded({ extended: true }));
  * (methodOverride 미사용시 get, post만 사용 가능)
  */
 app.use(methodOverride('_method'));
+
+/* 쿠키 추가 */
 app.use(cookieParser());
+
+/* 세션 추가 */
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(`${__dirname}/bin/core`, 'views/'));

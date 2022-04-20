@@ -1,9 +1,9 @@
 import express from 'express';
-import checkAuthMiddleWare from '../../middlewares/checkAuth.js';
+import checkAuth from '../../middlewares/checkTokenMiddleware.js';
 import main from './controllers/mainController.js';
 
 const mainRouter = express.Router();
 
-mainRouter.get('/', checkAuthMiddleWare, main.view);
+mainRouter.get('/', checkAuth.isLogin, main.view);
 
 export default mainRouter;

@@ -1,4 +1,4 @@
-import { rooms, users } from '../utils/[Class]livechatUtil/newInstance.js';
+import { rooms, users } from './[Class]livechatUtil/newInstance.js';
 
 const socket = (ws) => {
   ws.on('connection', (socket) => {

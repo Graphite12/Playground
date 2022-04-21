@@ -6,12 +6,19 @@ import path from 'path';
 import methodOverride from 'method-override';
 import socket from './bin/utils/socket.js';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import expressMYSQLStore from 'express-mysql-session';
+import { pool } from './bin/config/mysql/mysql_pool.js';
+import passport from 'passport';
 
 /* 라우터 */
 import userRouter from './bin/core/routes/user/userRouter.js';
 import liveRouter from './bin/core/routes/chat/liveChatRoute.js';
 import boardRouter from './bin/core/routes/board/boardRoute.js';
 import mainRouter from './bin/core/routes/main/mainRoute.js';
+
+import userPassRouter from './bin/core/routes/user/userPassportRouter.js';
+import connSession from './bin/config/session/session.js';
 
 /* 유틸 */
 
@@ -48,6 +55,11 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 
 /* 세션 추가 */
+connSession(app);
+
+/* 패스포트 셋팅 */
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(`${__dirname}/bin/core`, 'views/'));
@@ -62,7 +74,7 @@ app.set('views', path.join(`${__dirname}/bin/core`, 'views/'));
 app.use(mainRouter);
 app.use('/boards', boardRouter);
 app.use('/livechat', liveRouter);
-app.use('/users', userRouter);
+app.use('/users', userPassRouter);
 
 // /* http 실행 */
 const httpServer = createServer(app).listen(port, () => {
@@ -72,7 +84,7 @@ const ws = new Server(httpServer);
 
 socket(ws);
 
-/* app을 인자로 받거나 모듈로 활용할 경   우 사용 */
+/* app을 인자로 받거나 모듈로 활용할 경우 사용 */
 export default app;
 // Server생성자 함수를 활용해 http를 socketio서버로 실행
 

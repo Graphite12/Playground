@@ -35,6 +35,7 @@ export default {
   },
 
   isPasswordCompare: async (pass, word) => {
+    console.log(pass, word);
     let result = await bcrtpt.compareSync(pass, word);
     return result;
   },

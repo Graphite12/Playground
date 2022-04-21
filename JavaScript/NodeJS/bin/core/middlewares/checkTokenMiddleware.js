@@ -3,7 +3,8 @@ const checkAuthToken = async (req, res, next) => {};
 const isLogin = async (req, res, next) => {
   if (req.cookies.user) {
     req.isLogged = true;
-    return next();
+  } else {
+    req.isLogged = false;
   }
   next();
 };

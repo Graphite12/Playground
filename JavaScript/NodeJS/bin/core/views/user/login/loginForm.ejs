@@ -2,17 +2,26 @@
   <header>
     <h1>로그인 폼</h1>
   </header>
+
   <form action="/users/signinAf" method="post">
     <div>
       <label>
-        사용자 이메일:
+        사용자 이메일: <% if(locals.usermail) { %>
         <input
           name="email"
           type="text"
+          placeholder="사용자 이메일 입력"
+          class="input-login-email"
           value="<%= usermail %>"
+        />
+        <% } else { %>
+        <input
+          name="email"
+          type="text"
           placeholder="사용자 이메일 입력"
           class="input-login-email"
         />
+        <% } %>
       </label>
     </div>
     <div>

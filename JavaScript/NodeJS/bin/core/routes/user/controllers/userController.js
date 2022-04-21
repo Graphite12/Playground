@@ -36,14 +36,26 @@ export default {
       userModel.signInData(data, (result) => {
         console.log('결과', result);
 
-        if (!result) {
-          return;
+        /* INPUT에 입력한 내용이 없을 때 (이건 필요없을 거같음) */
+        if (result.status === 'unknown') {
+          res.render('user/login/loginForm.ejs', { msg: result.msg });
         }
 
+        /* 이메일 INPUT에 입력값이 없을 때  */
+        if (!result.status === 'mail') {
+          res.render('user/login/loginForm.ejs', { msg: result.msg });
+        }
+
+        /* 비밀번호 INPUT에 입력값이 없을 때  */
         if (result.status === 'pwd') {
-          return res.redirect('/users/signin');
+          res.render('user/login/loginForm.ejs', { msg: result.msg });
         }
 
+        if (result.status === 'notPwd') {
+          res.render('user/login/loginForm.ejs', { msg: result.msg });
+        }
+
+        /* 쿠키에 담아서 로그인시 이메일 자동완성 */
         if (req.body.mem_email === 'check') {
           res.cookie('rememberUMail', result.email, {
             path: '/',
@@ -54,20 +66,27 @@ export default {
         } else {
           res.clearCookie('rememberUMail');
         }
+        /* 쿠키만 사용했을 떄*/
+        // res
+        //   .cookie(
+        //     'user',
+        //     { isLogin: true, uid: result.uid },
+        //     {
+        //       path: '/',
+        //       secure: process.env.NODE_ENV === 'production' ? true : false,
+        //       httpOnly: true,
+        //       maxAge: 15 * 10000,
+        //     },
+        //   )
+        //   .status(301)
+        //   .redirect('/');
 
-        res
-          .cookie(
-            'user',
-            { isLogin: true, uid: result.uid },
-            {
-              path: '/',
-              secure: process.env.NODE_ENV === 'production' ? true : false,
-              httpOnly: true,
-              maxAge: 15 * 10000,
-            },
-          )
-          .status(301)
-          .redirect('/');
+        /* 세션을 사용했을 때 */
+        req.session.uid = result.uid;
+        req.session.isLogined = true;
+        req.session.save(() => {
+          res.redirect('/');
+        });
       });
     } catch (error) {
       console.log(error);
@@ -90,6 +109,18 @@ export default {
       userModel.signUpData(data, (result) => {
         console.log(result);
 
+        if (result.status === 'email') {
+          res.render();
+        }
+
+        if (result.status === 'existMail') {
+          res.render();
+        }
+
+        if (result.status === 'pwd') {
+          res.render();
+        }
+
         if (result) {
           res.redirect('/users/signin');
         } else {
@@ -103,11 +134,21 @@ export default {
   /* 유저 로그아웃 */
   signOut: async (req, res, next) => {
     try {
-      if (!req.cookies.user) {
-        return;
+      // if (!req.cookies.user) {
+      //   return;
+      // }
+
+      if (!req.session.uid) {
+        res.redirect('/');
       }
 
-      res.clearCookie('user').redirect('/');
+      req.session.isLogined = false;
+      delete req.session.uid;
+      req.session.save(() => {
+        res.redirect('/');
+      });
+
+      // res.clearCookie('user').redirect('/');
     } catch (error) {}
   },
   /* 유저 프로필 */

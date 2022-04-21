@@ -5,7 +5,7 @@ import valid from '../../../../utils/Validation/isValidation.js';
 
 let salt = 12;
 
-const Users = {
+export default {
   signInData: async (data, cb) => {
     try {
       const sql2 = `SELECT * FROM accounts WHERE email = ? `;
@@ -87,5 +87,3 @@ const Users = {
     const [item, fields] = await pool.execute(sql, [data]);
   },
 };
-
-export default Users;

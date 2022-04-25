@@ -13,4 +13,5 @@ const getConnection = async (cb) => {
     cb(conn);
   });
 };
+
 export { pool, getConnection };

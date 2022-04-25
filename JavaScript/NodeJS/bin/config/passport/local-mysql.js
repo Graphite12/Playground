@@ -4,6 +4,7 @@ import Users from '../../core/routes/user/models/db_users.js';
 
 export default () => {
   passport.use(
+    'local-signin',
     new LocalStrategy(
       {
         // req.body의 객체로 등록된다.
@@ -22,7 +23,6 @@ export default () => {
             if (result.status === 'success') {
               return done(null, result.data);
             } else {
-              console.log(result.msg);
               return done(null, false, result.msg);
             }
           });

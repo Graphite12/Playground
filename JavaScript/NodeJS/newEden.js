@@ -1,7 +1,7 @@
 import express from 'express';
-import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
-import https from 'https';
+import { createServer as newHttp } from 'http';
+import { Server } from 'socket.io';
+import { createServer as newHttps } from 'https';
 import path from 'path';
 import methodOverride from 'method-override';
 import socket from './bin/utils/socket.js';
@@ -17,7 +17,7 @@ import liveRouter from './bin/core/routes/chat/liveChatRoute.js';
 import boardRouter from './bin/core/routes/board/boardRoute.js';
 import mainRouter from './bin/core/routes/main/mainRoute.js';
 
-import userPassRouter from './bin/core/routes/user/userPassportRouter.js';
+import userPassRouter from './bin/core/routes/user/userPassRouter.js';
 
 /* 유틸 */
 
@@ -76,12 +76,17 @@ app.set('views', path.join(`${__dirname}/bin/core`, 'views/'));
 app.use(mainRouter);
 app.use('/boards', boardRouter);
 app.use('/livechat', liveRouter);
+//app.use('/users',userRouter);
 app.use('/users', userPassRouter);
 
-// /* http 실행 */
-const httpServer = createServer(app).listen(port, () => {
+/* http 실행 */
+const httpServer = newHttp(app).listen(port, () => {
   console.log(`연결 성공! *:${port}`);
 });
+
+/* https 실행 */
+const httpsServer = newHttps();
+
 const ws = new Server(httpServer);
 
 socket(ws);

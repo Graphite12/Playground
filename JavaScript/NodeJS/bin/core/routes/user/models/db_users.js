@@ -9,7 +9,7 @@ const Users = {
   signInData: async (data, cb) => {
     try {
       const sql2 = `SELECT * FROM accounts WHERE email = ? `;
-      console.log(data);
+
       if (data.email === '' || data.password === '') {
         return cb({ status: 'unknown', msg: '이메일/패스워드를 입력해주세요' });
       }
@@ -37,7 +37,7 @@ const Users = {
     try {
       if (!valid.isEmailValid(data.email)) {
         msg = `${data.email}의 형식이 일치하지 않습니다.`;
-        await cb({ status: 'email', msg });
+        return cb({ status: 'email', msg });
       }
 
       const [isValid, fields1] = await pool.execute(sql3, [data.email]);
@@ -47,22 +47,22 @@ const Users = {
       if (isValid.length >= 1) {
         msg = `${data.email}은/는 이미 사용중인 이메일 입니다.`;
 
-        await cb({ status: 'existMail', msg });
+        return cb({ status: 'existMail', msg });
       }
 
       if (data.password !== data.confirmPassword) {
         msg = `패스워드가 일치하지 않습니다.`;
-
-        await cb({ status: 'pwd', msg });
+        return cb({ status: 'pwd', msg });
       }
 
       const hashPass = await bcrypt.hash(data.password, salt);
 
       const params = [generateUUID(), data.nickname, data.email, hashPass];
 
-      const [item, fields2] = await pool.execute(sql2, params);
+      const [item] = await pool.execute(sql2, params);
 
-      await cb(item);
+      console.log(item);
+      return cb({ status: 'success' });
     } catch (error) {
       console.log(error);
     }
@@ -73,9 +73,45 @@ const Users = {
   profileData: async (data, cb) => {
     const sql = `SELECT * FROM accounts WHERE uid = ? `;
 
-    const [item, fields] = await pool.execute(sql, [data]);
+    const [item] = await pool.execute(sql, [data]);
 
-    await cb(item);
+    delete item[0].password;
+
+    return cb(item[0]);
+  },
+  getAllUser: async (cb) => {
+    const sql = `SELECT * FROM accounts`;
+
+    const [list] = await pool.execute(sql);
+
+    cb(list);
+  },
+
+  updateUserData: async (data, cb) => {
+    const sql2 = `UPDATE accounts SET username = ?, email = ?, password = ? WHERE uid = ?`;
+
+    if (!valid.isEmailValid(data.email)) {
+      return cb({
+        status: 'error',
+        msg: `${data.email}의 형식이 일치하지 않습니다.`,
+      });
+    }
+
+    if (data.password !== data.confirmPassword) {
+      return cb({ status: 'error', msg: `패스워드가 일치하지 않습니다.` });
+    }
+
+    console.log(data.uid);
+    const newHash = await bcrypt.hash(data.password, salt);
+
+    const [item] = await pool.execute(sql2, [
+      data.username,
+      data.email,
+      newHash,
+      data.uid,
+    ]);
+
+    return cb({ status: 'success', data: item });
   },
 };
 

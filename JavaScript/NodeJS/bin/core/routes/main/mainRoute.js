@@ -4,6 +4,6 @@ import main from './controllers/mainController.js';
 
 const mainRouter = express.Router();
 
-mainRouter.get('/', local.isLogined, main.view2);
+mainRouter.get('/', main.view2);
 
 export default mainRouter;

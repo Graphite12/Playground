@@ -1,19 +1,17 @@
 import passport from 'passport';
 import Users from '../../core/routes/user/models/db_users.js';
-import local from './local.js';
+import local from './local-mysql.js';
 
 export default () => {
   passport.serializeUser((user, done) => {
-    console.log('사용자', user);
-    done(null, user);
+    done(null, user.uid);
   });
 
   passport.deserializeUser((id, done) => {
-    Users.profileData(id.uid, (result) => {
-      console.log('아이디', id);
-      console.log('보기', result);
+    Users.profileData(id, (result) => {
+      delete result.password;
 
-      done(null, result[0]);
+      done(null, result);
     });
   });
 

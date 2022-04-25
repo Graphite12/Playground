@@ -6,8 +6,8 @@ const MySQLStore = expressMYSQLStore(session);
 const sessionStore = new MySQLStore(
   {
     clearExpired: true,
-    expiration: 10000,
-    checkExpirationInterval: 10000,
+    expiration: 100000,
+    checkExpirationInterval: 100000,
     createDatabaseTable: true,
   },
   pool,
@@ -23,7 +23,7 @@ const sessionOption = {
   // 데이터 저장 형식
   store: sessionStore,
   cookie: {
-    expires: 10000,
+    expires: 100000,
     secure: process.env.NODE_ENV === 'production' ? true : false,
   },
 };

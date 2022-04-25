@@ -1,0 +1,20 @@
+<div>
+  <header><h1>비밀번호 변경</h1></header>
+  <form action="/users/reset-password?_method=PUT" method="post">
+    <% if(locals.userdata) { %>
+    <div>
+      <input name="email" value="<%= userdata.email %>" />
+    </div>
+    <div>
+      <input name="username" value="<%= userdata.username %>" />
+    </div>
+    <div>
+      <input name="password" placeholder="newPassword" />
+    </div>
+    <div>
+      <input name="confirmPassword" placeholder="confirmNewPassword" />
+    </div>
+    <button type="submit">수정하기</button>
+    <% } %>
+  </form>
+</div>

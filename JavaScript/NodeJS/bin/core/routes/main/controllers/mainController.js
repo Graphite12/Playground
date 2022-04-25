@@ -8,8 +8,9 @@ const main = {
       isLoggedIn: req.session.isLogined,
     });
   },
+
   view2: (req, res) => {
-    res.render('main', {
+    res.render('main.ejs', {
       title: 'RealWorld',
       isLoggedIn: req.isAuthenticated(),
     });

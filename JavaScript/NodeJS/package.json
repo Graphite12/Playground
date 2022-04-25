@@ -1,13 +1,13 @@
 {
-  "name": "mbc_pattern",
+  "name": "Learn Project Board",
   "version": "1.0.0",
-  "description": "design pattern",
+  "description": "Learn Project",
   "main": "newEden.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node newEden.js",
+    "dev": "nodemon newEden.js"
   },
   "author": "",
   "license": "ISC",

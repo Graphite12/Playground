@@ -1,4 +1,5 @@
 import userModel from '../models/db_users.js';
+import passport from 'passport';
 
 export default {
   /* 로그인 폼 불러오기 */
@@ -17,6 +18,8 @@ export default {
   /* 유저 로그인 */
   signIn: async (req, res, next) => {
     try {
+      console.log(req.body);
+      console.log(res);
     } catch (error) {
       console.log(error);
     }

@@ -1,21 +1,28 @@
 import { Router } from 'express';
 import passport from 'passport';
-import Local from 'passport-local';
-const LocalStrategy = Local.Strategy;
+import passportCtrl from './controllers/userPassportController.js';
+import local from '../../middlewares/passportLocal.js';
 
 let userPassRouter = Router();
 
-userPassRouter.get('/signin', (req, res, next) => {
+userPassRouter.get('/signin', local.isNotLogined, (req, res, next) => {
   res.render('user/login/loginForm.ejs');
 });
-userPassRouter.get('/signup');
+
+userPassRouter.get('/signup', (req, res, next) => {
+  res.render('user/register/registerForm.ejs');
+});
+
 userPassRouter.post(
   '/signinAf',
-  passport.authenticate('local-signin', {
+  local.isNotLogined,
+  passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/user/signin',
+    failureRedirect: '/users/signin',
   }),
 );
+
 userPassRouter.post('/signup');
+// userPassRouter.get('/logout', local.isLogined);
 
 export default userPassRouter;

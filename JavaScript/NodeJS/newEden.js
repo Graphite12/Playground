@@ -6,10 +6,10 @@ import path from 'path';
 import methodOverride from 'method-override';
 import socket from './bin/utils/socket.js';
 import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import expressMYSQLStore from 'express-mysql-session';
-import { pool } from './bin/config/mysql/mysql_pool.js';
 import passport from 'passport';
+import passportConfig from './bin/config/passport/index.js';
+import sessionOption from './bin/config/session/index.js';
+import session from 'express-session';
 
 /* 라우터 */
 import userRouter from './bin/core/routes/user/userRouter.js';
@@ -18,7 +18,6 @@ import boardRouter from './bin/core/routes/board/boardRoute.js';
 import mainRouter from './bin/core/routes/main/mainRoute.js';
 
 import userPassRouter from './bin/core/routes/user/userPassportRouter.js';
-import connSession from './bin/config/session/session.js';
 
 /* 유틸 */
 
@@ -55,10 +54,13 @@ app.use(methodOverride('_method'));
 app.use(cookieParser());
 
 /* 세션 추가 */
-connSession(app);
+app.use(session(sessionOption));
 
 /* 패스포트 셋팅 */
+passportConfig();
+// express req 객체에 passport 추가
 app.use(passport.initialize());
+// express session에 passport 정보 저장. session 미들웨어보다 아래에 위치해야함.
 app.use(passport.session());
 
 app.set('view engine', 'ejs');
@@ -84,8 +86,6 @@ const ws = new Server(httpServer);
 
 socket(ws);
 
-/* app을 인자로 받거나 모듈로 활용할 경우 사용 */
-export default app;
 // Server생성자 함수를 활용해 http를 socketio서버로 실행
 
 /* https 실행 */

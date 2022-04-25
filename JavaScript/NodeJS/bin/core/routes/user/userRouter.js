@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import check from '../../middlewares/checkTokenMiddleware.js';
+
 /* 일반 로그인 */
 import userController from './controllers/userController.js';
 

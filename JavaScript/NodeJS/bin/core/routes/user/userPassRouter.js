@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import Router from '../index.js';
 import passport from 'passport';
 import passportCtrl from './controllers/userPassMysql.js';
 import local from '../../middlewares/passportLocal.js';
@@ -22,7 +22,7 @@ userPassRouter.post('/signup', local.isNotLogined, passportCtrl.signUp);
 
 userPassRouter.get('/logout', local.isLogined, passportCtrl.signOut);
 
-userPassRouter.get('/myprofile', local.isLogined, passportCtrl.getUserProfile);
+userPassRouter.get('/:uname', local.isLogined, passportCtrl.getUserProfile);
 
 userPassRouter.get('/userlist', passportCtrl.getUserList);
 
@@ -37,4 +37,5 @@ userPassRouter.put(
   local.isLogined,
   passportCtrl.resetPassword,
 );
+
 export default userPassRouter;

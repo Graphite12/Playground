@@ -1,10 +1,10 @@
-import express from 'express';
+import Router from '../index.js';
 import boards from './controllers/boardController.js';
-
-const boardRouter = express.Router();
 
 // /* 게시글 리스트 */
 // boardRouter.get('/list/:id', boards.getList);
+
+let boardRouter = Router();
 
 /* 게시글 리스트 페이지네이션 */
 boardRouter.get('/list/:page', boards.getListPagination);

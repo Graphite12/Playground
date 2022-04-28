@@ -10,9 +10,9 @@ const main = {
   },
 
   view2: (req, res) => {
-    res.render('main.ejs', {
+    res.render('home', {
       title: 'RealWorld',
-      isLoggedIn: req.isAuthenticated(),
+      isLoggedIn: req.user,
     });
   },
 };

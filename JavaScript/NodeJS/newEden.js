@@ -18,6 +18,7 @@ import boardRouter from './bin/core/routes/board/boardRoute.js';
 import mainRouter from './bin/core/routes/main/mainRoute.js';
 
 import userPassRouter from './bin/core/routes/user/userPassRouter.js';
+import socialRouter from './bin/core/routes/OAuth/oauthRouter.js';
 
 /* 유틸 */
 
@@ -78,7 +79,7 @@ app.use('/boards', boardRouter);
 app.use('/livechat', liveRouter);
 //app.use('/users',userRouter);
 app.use('/users', userPassRouter);
-
+app.use('/auth', socialRouter);
 /* http 실행 */
 const httpServer = newHttp(app).listen(port, () => {
   console.log(`연결 성공! *:${port}`);
@@ -90,6 +91,9 @@ const httpsServer = newHttps();
 const ws = new Server(httpServer);
 
 socket(ws);
+
+/* app Module */
+export default app;
 
 // Server생성자 함수를 활용해 http를 socketio서버로 실행
 

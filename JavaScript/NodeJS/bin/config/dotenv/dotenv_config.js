@@ -23,4 +23,30 @@ const pool_config = {
   connectionLimit: 10, // 최대 연결 횟수
 };
 
-export { mysql_config, pool_config };
+let defualt_url = 'http://localhost:8080';
+/* OAuth2.0  */
+const google_config = {
+  callback: `${defualt_url}/auth/google/callback`,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientPWD: process.env.GOOGLE_CLIENT_SECRET,
+};
+
+const kakao_config = {
+  callback: '/users/google/callback',
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientPWD: process.env.GOOGLE_CLIENT_SECRET,
+};
+
+const github_config = {
+  callback: '/users/google/callback',
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientPWD: process.env.GOOGLE_CLIENT_SECRET,
+};
+
+const facebook_config = {
+  callback: '/users/google/callback',
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientPWD: process.env.GOOGLE_CLIENT_SECRET,
+};
+
+export { mysql_config, pool_config, google_config, kakao_config };

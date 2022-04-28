@@ -1,7 +1,9 @@
 <div>
   <header></header>
   <div>
-    <div><%= userdata.uid %></div>
-    <div><%= userdata.username %></div>
+    <% console.log(locals)%>
+    <div><%= locals.userdata.uid %></div>
+    <div><%= locals.userdata.username %></div>
+    <a href="/users/reset-password">비밀번호 재설정</a>
   </div>
 </div>

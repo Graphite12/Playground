@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import Router from '../index.js';
 
 /* 일반 로그인 */
 import userController from './controllers/userController.js';
@@ -15,11 +15,6 @@ userRouter.get('/signup', userController.getRegisterForm);
 userRouter.post('/signinAf', userController.signIn);
 userRouter.post('/signup', userController.signUp);
 
-/* 기타 등등 */
-userRouter.post('/forgetPWD');
-userRouter.get('/:id/resetPWD');
-userRouter.get('/:id/forgetPWD');
-userRouter.get('/:id/profile');
 userRouter.get('/logout', userController.signOut);
 
 export default userRouter;

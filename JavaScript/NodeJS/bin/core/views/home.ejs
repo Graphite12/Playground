@@ -10,9 +10,9 @@
     <title>HP 커뮤니티</title>
   </head>
   <body>
-    <div><%= title %></div>
-    <%- include('./category', {isLoggedIn: isLoggedIn}) %>
-    <a href="/boards/list/1">갤러리</a>
-    <a href="/livechat">라이브 챗</a>
+    <div><%- include('./layout/header') %></div>
+    <div><%- include('./layout/navbar') %></div>
+    <div><%- include('./layout/main') %></div>
+    <div><%- include('./layout/footer') %></div>
   </body>
 </html>

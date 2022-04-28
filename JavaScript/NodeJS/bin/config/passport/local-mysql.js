@@ -21,6 +21,8 @@ export default () => {
 
           await Users.signInData(data, (result) => {
             if (result.status === 'success') {
+              delete result.data.passowrd;
+
               return done(null, result.data);
             } else {
               return done(null, false, result.msg);

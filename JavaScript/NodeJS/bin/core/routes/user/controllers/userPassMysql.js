@@ -1,5 +1,4 @@
 import userModel from '../models/db_users.js';
-import passport from 'passport';
 
 export default {
   /* 로그인 폼 불러오기 */
@@ -36,16 +35,10 @@ export default {
       userModel.signUpData(data, (result) => {
         console.log(result);
 
-        if (result.status === 'email') {
-          res.render();
-        }
-
-        if (result.status === 'existMail') {
-          res.render();
-        }
-
-        if (result.status === 'pwd') {
-          res.render();
+        if (result.status === 'error') {
+          res.render('user/register/registerForm', {
+            message: result.msg,
+          });
         }
 
         if (result) {
@@ -79,18 +72,10 @@ export default {
       let user = req.user;
 
       if (user) {
-        res.render(`user/profile/profile.ejs`, {
+        res.render(`user/profile/profile`, {
           userdata: user,
         });
       }
-      // let { user } = req.session.passport;
-      // console.log('어쩔티비', user);
-      // if (user) {
-      //   await userModel.profileData(user, (result) => {
-      //     console.log('결과', result);
-      //     res.render(`user/profile/profile.ejs`, {});
-      //   });
-      // }
     } catch (error) {
       console.log(error);
     }

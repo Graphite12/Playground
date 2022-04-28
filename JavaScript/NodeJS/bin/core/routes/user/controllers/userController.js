@@ -37,21 +37,7 @@ export default {
         console.log('결과', result);
 
         /* INPUT에 입력한 내용이 없을 때 (이건 필요없을 거같음) */
-        if (result.status === 'unknown') {
-          res.render('user/login/loginForm.ejs', { msg: result.msg });
-        }
-
-        /* 이메일 INPUT에 입력값이 없을 때  */
-        if (!result.status === 'mail') {
-          res.render('user/login/loginForm.ejs', { msg: result.msg });
-        }
-
-        /* 비밀번호 INPUT에 입력값이 없을 때  */
-        if (result.status === 'pwd') {
-          res.render('user/login/loginForm.ejs', { msg: result.msg });
-        }
-
-        if (result.status === 'notPwd') {
+        if (result.status === 'error') {
           res.render('user/login/loginForm.ejs', { msg: result.msg });
         }
 
@@ -109,16 +95,7 @@ export default {
       userModel.signUpData(data, (result) => {
         console.log(result);
 
-        if (result.status === 'email') {
-          res.render();
-        }
-
-        if (result.status === 'existMail') {
-          res.render();
-        }
-
-        if (result.status === 'pwd') {
-          res.render();
+        if (result.status === 'error') {
         }
 
         if (result) {
@@ -134,10 +111,6 @@ export default {
   /* 유저 로그아웃 */
   signOut: async (req, res, next) => {
     try {
-      // if (!req.cookies.user) {
-      //   return;
-      // }
-
       if (!req.session.uid) {
         res.redirect('/');
       }
@@ -149,7 +122,9 @@ export default {
       });
 
       // res.clearCookie('user').redirect('/');
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
   /* 유저 프로필 */
   getUserProfile: async (req, res, next) => {

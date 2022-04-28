@@ -11,13 +11,13 @@ const Users = {
       const sql2 = `SELECT * FROM accounts WHERE email = ? `;
 
       if (data.email === '' || data.password === '') {
-        return cb({ status: 'unknown', msg: '이메일/패스워드를 입력해주세요' });
+        return cb({ status: 'error', msg: '이메일/패스워드를 입력해주세요' });
       }
 
       const [info, fields1] = await pool.execute(sql2, [data.email]);
 
       if (!(await valid.isPasswordCompare(data.password, info[0].password))) {
-        return cb({ status: 'notPwd', msg: '비밀번호를 잘못입력하셨습니다.' });
+        return cb({ status: 'error', msg: '비밀번호를 잘못입력하셨습니다.' });
       }
 
       delete info[0].password;
@@ -29,7 +29,7 @@ const Users = {
 
   signUpData: async (data, cb) => {
     const sql1 = `INSERT INTO accounts (uid, username, email, password) VALUES (uuid_to_bin(?), ?, ?, ?)`;
-    const sql2 = `INSERT INTO accounts (uid, username, email, password) VALUES (?, ?, ?, ?)`;
+    const sql2 = `INSERT INTO accounts (uid, username, email, password, type) VALUES (?, ?, ?, ?, ?)`;
     const sql3 = 'SELECT * FROM accounts WHERE email = ?';
 
     let msg;
@@ -47,20 +47,25 @@ const Users = {
       if (isValid.length >= 1) {
         msg = `${data.email}은/는 이미 사용중인 이메일 입니다.`;
 
-        return cb({ status: 'existMail', msg });
+        return cb({ status: 'error', msg });
       }
 
       if (data.password !== data.confirmPassword) {
         msg = `패스워드가 일치하지 않습니다.`;
-        return cb({ status: 'pwd', msg });
+        return cb({ status: 'error', msg });
       }
 
       const hashPass = await bcrypt.hash(data.password, salt);
 
-      const params = [generateUUID(), data.nickname, data.email, hashPass];
+      const params = [
+        generateUUID(),
+        data.nickname,
+        data.email,
+        hashPass,
+        'Local',
+      ];
 
       const [item] = await pool.execute(sql2, params);
-
       console.log(item);
       return cb({ status: 'success' });
     } catch (error) {
@@ -83,7 +88,7 @@ const Users = {
     const sql = `SELECT * FROM accounts`;
 
     const [list] = await pool.execute(sql);
-
+    console.log(list);
     cb(list);
   },
 

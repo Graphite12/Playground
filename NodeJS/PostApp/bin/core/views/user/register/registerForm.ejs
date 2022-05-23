@@ -1,0 +1,41 @@
+<div>
+  <header><h1>회원가입 폼</h1></header>
+  <form action="/users/signup" method="post">
+    <div>
+      <label>
+        이메일:
+        <input name="email" type="text" class="input-register-emil" />
+      </label>
+    </div>
+    <div>
+      <label>
+        비밀번호:
+        <input
+          name="password"
+          type="password"
+          class="input-register-password"
+        />
+      </label>
+    </div>
+    <div>
+      <label
+        >비밀번호 확인:
+        <input
+          name="confirmPassword"
+          type="password"
+          class="input-check-password"
+        />
+      </label>
+    </div>
+    <div>
+      <label
+        >사용자이름:
+        <input name="nickname" type="text" class="nickname" />
+      </label>
+    </div>
+    <button>회원가입</button>
+  </form>
+  <footer>
+    <p>이미 가입하셨다구요? <a href="/users/signin">로그인 하러가기</a></p>
+  </footer>
+</div>

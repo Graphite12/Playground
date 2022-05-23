@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>내 게시글 보기</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>작성자:</td>
+        <td>
+          <input type="text" name="name" value="<%= data.name %>" /><br />
+        </td>
+      </tr>
+
+      <tr>
+        <td>제목:</td>
+        <td>
+          <input type="text" name="subject" value="<%= data.subject %>" /><br />
+        </td>
+      </tr>
+
+      <tr>
+        <td>내용:</td>
+        <td>
+          <textarea type="text" name="content" value="<%= data.content %>">
+<%= data.content %></textarea
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>생성일:</td>
+        <td>
+          <input type="text" name="created_at" value="<%= data.created_at %>" />
+        </td>
+      </tr>
+      <tr>
+        <td>수정일:</td>
+        <td>
+          <input type="text" name="updated_at" value="<%= data.updated_at %>" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div>
+            <button onclick="location.href='/boards/post/edit/<%= data.id %>'">
+              수정
+            </button>
+            <button
+              onclick="location.href='/boards/post/delete/<%= data.id %>'"
+            >
+              안되는 삭제
+            </button>
+            <form method="post" action="/boards/post/delete/<%= data.id %>">
+              <button type="submit">찐 삭제</button>
+            </form>
+            <a href="/boards/list">글 목록</a>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

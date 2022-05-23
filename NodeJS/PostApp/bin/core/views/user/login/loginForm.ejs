@@ -1,0 +1,58 @@
+<div>
+  <header>
+    <h1>로그인 폼</h1>
+  </header>
+
+  <form action="/users/signinAf" method="post">
+    <div>
+      <label>
+        사용자 이메일: <% if(locals.usermail) { %>
+        <input
+          name="email"
+          type="text"
+          placeholder="사용자 이메일 입력"
+          class="input-login-email"
+          value="<%= usermail %>"
+        />
+        <% } else { %>
+        <input
+          name="email"
+          type="text"
+          placeholder="사용자 이메일 입력"
+          class="input-login-email"
+        />
+        <% } %>
+      </label>
+    </div>
+    <div>
+      <label>
+        사용자 비밀번호:
+        <input
+          name="password"
+          placeholder="사용자 비밀번호 입력"
+          type="password"
+          class="input-login-password"
+        />
+      </label>
+    </div>
+    <div>
+      <label>
+        Email 저장:
+        <input
+          name="mem_email"
+          type="checkbox"
+          value="check"
+          class="remember-login-email"
+        />
+      </label>
+    </div>
+    <button>로그인</button>
+  </form>
+  <div><%- include ('../OAuth/socialForm') %></div>
+  <footer>
+    <p>처음 오셨나요? <a href="/users/signup">가입하기</a></p>
+    <p>
+      비밀번호 잊어먹음? <a href="/users/forgotPWD">비밀번호 잊어먹음ㅋㅋ</a>
+    </p>
+  </footer>
+</div>

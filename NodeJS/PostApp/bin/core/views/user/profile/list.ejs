@@ -1,0 +1,11 @@
+<div>
+  <ul>
+    <% result.forEach((list) => { %>
+    <li>
+      <div><%= list.email %></div>
+      <div><%= list.username %></div>
+      <div><%= list.created_at %></div>
+    </li>
+    <% }) %>
+  </ul>
+</div>

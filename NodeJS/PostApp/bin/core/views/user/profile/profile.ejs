@@ -1,0 +1,10 @@
+<div>
+  <div>
+    <% console.log(locals)%> <% if(locals.userdata.status === 'success' &&
+    locals.userdata.data.type === 'Local') { %>
+    <div><%= locals.userdata.data.uid %></div>
+    <div><%= locals.userdata.data.username %></div>
+    <a href="/users/reset-password">비밀번호 재설정</a>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<nav>
+  <div>
+    <ul>
+      <li><a href="/boards/list/1">갤러리</a></li>
+      <li><a href="/livechat">라이브 챗</a></li>
+    </ul>
+  </div>
+  <div>
+    <% if(locals.userdata === undefined) { %>
+    <a href="/users/signin">로그인</a>
+    <a href="/users/signup">회원가입</a>
+    <% } else { %>
+    <a href="/users/logout">로그아웃</a>
+    <a href="/users/<%= locals.userdata.data.username %>">프로필</a>
+    <% } %>
+  </div>
+</nav>

@@ -4,4 +4,5 @@ node_modules
 
 ## Enviroment
 .env
-**/env
+**/*/.env
+**/.env
